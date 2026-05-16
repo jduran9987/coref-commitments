@@ -1,0 +1,78 @@
+{
+  "source": "email",
+  "threads": [
+    {
+      "thread_id": "thread_index_strategy",
+      "subject": "Index strategy review — Postgres 16 migration",
+      "messages": [
+        {
+          "msg_id": "E001",
+          "sent": "2026-05-11T14:18:00Z",
+          "from": "alex.rodriguez@acme.com",
+          "to": ["jordan@pgconsult.io"],
+          "cc": ["priya.patel@acme.com"],
+          "body": "Hey Jordan,\n\nLooping you in on the index strategy work for our Postgres 14 → 16 migration. I can take a look at the index strategy this week and would love your read on the composite index proposal — doc attached.\n\nPriya (cc'd) is leading the schema diff in parallel.\n\nThanks,\nAlex"
+        },
+        {
+          "msg_id": "E002",
+          "sent": "2026-05-11T16:32:00Z",
+          "from": "jordan@pgconsult.io",
+          "to": ["alex.rodriguez@acme.com"],
+          "cc": ["priya.patel@acme.com"],
+          "body": "Happy to. I'll send notes by Thursday.\n\nJordan"
+        },
+        {
+          "msg_id": "E003",
+          "sent": "2026-05-12T16:45:00Z",
+          "from": "jordan@pgconsult.io",
+          "to": ["alex.rodriguez@acme.com", "priya.patel@acme.com"],
+          "body": "Reviewed the proposal. One concern: the composite index on (tenant_id, created_at) may not help your hot query — the selectivity on tenant_id is too low in your workload pattern. Happy to jump on a call to walk through. Alex, what works for you?\n\nJordan"
+        },
+        {
+          "msg_id": "E004",
+          "sent": "2026-05-12T17:08:00Z",
+          "from": "alex.rodriguez@acme.com",
+          "to": ["jordan@pgconsult.io"],
+          "cc": ["priya.patel@acme.com"],
+          "body": "Wed 2pm my time?\n\nAlex"
+        },
+        {
+          "msg_id": "E005",
+          "sent": "2026-05-12T17:14:00Z",
+          "from": "jordan@pgconsult.io",
+          "to": ["alex.rodriguez@acme.com"],
+          "cc": ["priya.patel@acme.com"],
+          "body": "works.\n\nJordan"
+        },
+        {
+          "msg_id": "E006",
+          "sent": "2026-05-13T17:02:00Z",
+          "from": "alex.rodriguez@acme.com",
+          "to": ["jordan@pgconsult.io", "priya.patel@acme.com"],
+          "body": "Per our call: dropping the composite index, going with two single-column indexes (tenant_id; created_at) plus a partial index for the active rows. I'll update the proposal doc tonight.\n\nAlex"
+        },
+        {
+          "msg_id": "E007",
+          "sent": "2026-05-13T20:43:00Z",
+          "from": "alex.rodriguez@acme.com",
+          "to": ["jordan@pgconsult.io", "priya.patel@acme.com"],
+          "body": "Doc updated: https://docs.acme.com/migrate/indexes-v2 — let me know if anything looks off.\n\nAlex"
+        },
+        {
+          "msg_id": "E008",
+          "sent": "2026-05-14T09:55:00Z",
+          "from": "jordan@pgconsult.io",
+          "to": ["alex.rodriguez@acme.com", "priya.patel@acme.com"],
+          "body": "Reviewed the update — looks good. 👍 Ship it.\n\nJordan"
+        },
+        {
+          "msg_id": "E009",
+          "sent": "2026-05-14T10:12:00Z",
+          "from": "priya.patel@acme.com",
+          "to": ["alex.rodriguez@acme.com", "jordan@pgconsult.io"],
+          "body": "Thanks Jordan, appreciate the quick turnaround. Alex — I'll fold this into the schema diff today.\n\nPriya"
+        }
+      ]
+    }
+  ]
+}

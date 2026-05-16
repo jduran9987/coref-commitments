@@ -1,0 +1,124 @@
+{
+  "source": "linear",
+  "tickets": [
+    {
+      "ticket_id": "ENG-447",
+      "title": "Postgres 14 → 16 migration (umbrella)",
+      "assignee": "devon-b",
+      "comments": [
+        {
+          "comment_id": "L001",
+          "ticket_id": "ENG-447",
+          "created": "2026-05-11T09:00:00Z",
+          "author": "devon-b",
+          "body": "Kicking off the week. Three workstreams: (1) schema diff — Priya, by EOD Wed; (2) index strategy review with Jordan — Alex, by Fri; (3) staging dry-run — Jamie, by Thu. Stakeholder review Fri 2pm. Add updates on this ticket."
+        },
+        {
+          "comment_id": "L002",
+          "ticket_id": "ENG-447",
+          "created": "2026-05-11T09:15:00Z",
+          "author": "mchen",
+          "body": "Plan looks good. I'll stay light-touch unless something blocks."
+        },
+        {
+          "comment_id": "L003",
+          "ticket_id": "ENG-447",
+          "created": "2026-05-14T09:30:00Z",
+          "author": "devon-b",
+          "body": "Status check for tomorrow's review — where are we?"
+        },
+        {
+          "comment_id": "L004",
+          "ticket_id": "ENG-447",
+          "created": "2026-05-14T09:45:00Z",
+          "author": "priya-p",
+          "body": "Schema diff lands today, pairing with Sam in the AM."
+        },
+        {
+          "comment_id": "L005",
+          "ticket_id": "ENG-447",
+          "created": "2026-05-14T10:02:00Z",
+          "author": "sam-o",
+          "body": "Dry-run pushed to Fri AM, but on track for the review."
+        },
+        {
+          "comment_id": "L006",
+          "ticket_id": "ENG-447",
+          "created": "2026-05-14T10:18:00Z",
+          "author": "alex-r",
+          "body": "Index strategy locked, doc updated, Jordan signed off."
+        }
+      ]
+    },
+    {
+      "ticket_id": "ENG-451",
+      "title": "Staging dry-run for Postgres migration",
+      "assignee": "jamie-w",
+      "comments": [
+        {
+          "comment_id": "L007",
+          "ticket_id": "ENG-451",
+          "created": "2026-05-11T11:30:00Z",
+          "author": "jamie-w",
+          "body": "Picking this up. Targeting Thursday."
+        },
+        {
+          "comment_id": "L008",
+          "ticket_id": "ENG-451",
+          "created": "2026-05-12T11:08:00Z",
+          "author": "jamie-w",
+          "body": "Got pulled into the incident review. Sam is handling this now."
+        },
+        {
+          "comment_id": "L009",
+          "ticket_id": "ENG-451",
+          "created": "2026-05-13T13:02:00Z",
+          "author": "sam-o",
+          "body": "Hitting a snag with the replication lag, might need to push to Friday morning. Maya, can you weigh in on whether that's acceptable given the review?"
+        },
+        {
+          "comment_id": "L010",
+          "ticket_id": "ENG-451",
+          "created": "2026-05-13T13:28:00Z",
+          "author": "mchen",
+          "body": "Friday AM is fine if it has to slip, but loop me in earlier next time."
+        },
+        {
+          "comment_id": "L011",
+          "ticket_id": "ENG-451",
+          "created": "2026-05-13T14:05:00Z",
+          "author": "sam-o",
+          "body": "ack, will do. Updating ETA to Fri AM."
+        },
+        {
+          "comment_id": "L012",
+          "ticket_id": "ENG-451",
+          "created": "2026-05-14T16:35:00Z",
+          "author": "sam-o",
+          "body": "Confirmed pairing with Priya at 9am Friday."
+        }
+      ]
+    },
+    {
+      "ticket_id": "ENG-462",
+      "title": "Index strategy for Postgres 16",
+      "assignee": "alex-r",
+      "comments": [
+        {
+          "comment_id": "L013",
+          "ticket_id": "ENG-462",
+          "created": "2026-05-11T14:30:00Z",
+          "author": "alex-r",
+          "body": "Looped in Jordan (external consultant) via email. Targeting Friday for sign-off."
+        },
+        {
+          "comment_id": "L014",
+          "ticket_id": "ENG-462",
+          "created": "2026-05-13T20:50:00Z",
+          "author": "alex-r",
+          "body": "Update: dropped composite index in favor of two single-column indexes plus a partial index per Jordan's review. Doc updated: https://docs.acme.com/migrate/indexes-v2"
+        }
+      ]
+    }
+  ]
+}

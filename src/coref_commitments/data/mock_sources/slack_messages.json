@@ -1,0 +1,79 @@
+{
+  "source": "slack",
+  "messages": [
+    {"msg_id": "S001", "channel": "db-migration", "ts": "2026-05-11T09:32:00Z", "user_id": "U02PRIYA", "text": "morning all — I'm taking the schema diff this week. I'll have it ready by EOD Wed."},
+    {"msg_id": "S002", "channel": "db-migration", "ts": "2026-05-11T09:34:00Z", "user_id": "U03ALEXR", "text": "I'll own the index strategy piece — pulling Jordan in over email today."},
+    {"msg_id": "S003", "channel": "db-migration", "ts": "2026-05-11T09:35:00Z", "user_id": "U05JAMIE", "text": "I can drive the staging dry-run, targeting Thursday."},
+    {"msg_id": "S004", "channel": "db-migration", "ts": "2026-05-11T09:36:00Z", "user_id": "U06SAM", "text": "I can help wherever needed"},
+    {"msg_id": "S005", "channel": "db-migration", "ts": "2026-05-11T09:38:00Z", "user_id": "U07MAYA", "text": "👍 plan looks good, ping me if anything blocks"},
+    {"msg_id": "S006", "channel": "db-migration", "ts": "2026-05-11T09:42:00Z", "user_id": "U08DEVON", "text": "thanks all — ENG-447 has the full breakdown, please add updates there too"},
+
+    {"msg_id": "S007", "channel": "db-migration", "ts": "2026-05-11T10:15:00Z", "user_id": "U06SAM", "text": "btw the coffee machine on 4 is finally fixed", "_note": "filler"},
+    {"msg_id": "S008", "channel": "db-migration", "ts": "2026-05-11T10:16:00Z", "user_id": "U05JAMIE", "text": "praise be ☕", "_note": "filler"},
+    {"msg_id": "S009", "channel": "db-migration", "ts": "2026-05-11T10:17:00Z", "user_id": "U02PRIYA", "text": "I'll believe it when I see it", "_note": "filler — note: 'I'll' here is NOT a commitment"},
+
+    {"msg_id": "S010", "channel": "db-migration", "ts": "2026-05-11T15:48:00Z", "user_id": "U04ALEXK", "text": "hey 👋 dropping in — happy to help if you need a frontend perspective on the rollout"},
+    {"msg_id": "S011", "channel": "db-migration", "ts": "2026-05-11T15:51:00Z", "user_id": "U08DEVON", "text": "thanks Alex, will keep that in mind"},
+    {"msg_id": "S012", "channel": "db-migration", "ts": "2026-05-11T15:52:00Z", "user_id": "U02PRIYA", "text": "appreciate it 🙏"},
+
+    {"msg_id": "S013", "channel": "db-migration", "ts": "2026-05-11T17:05:00Z", "user_id": "U05JAMIE", "text": "anyone else have the offsite planning thing tomorrow?", "_note": "filler"},
+    {"msg_id": "S014", "channel": "db-migration", "ts": "2026-05-11T17:06:00Z", "user_id": "U08DEVON", "text": "3pm tomorrow yeah", "_note": "filler"},
+    {"msg_id": "S015", "channel": "db-migration", "ts": "2026-05-11T17:07:00Z", "user_id": "U05JAMIE", "text": "k thx", "_note": "filler"},
+
+    {"msg_id": "S016", "channel": "db-migration", "ts": "2026-05-12T09:18:00Z", "user_id": "U02PRIYA", "text": "Quick q for Alex — does the new index naming convention apply to partial indexes too?"},
+    {"msg_id": "S017", "channel": "db-migration", "ts": "2026-05-12T09:21:00Z", "thread_ts": "2026-05-12T09:18:00Z", "user_id": "U03ALEXR", "text": "yeah, same convention. I documented it in the wiki yesterday."},
+    {"msg_id": "S018", "channel": "db-migration", "ts": "2026-05-12T09:24:00Z", "thread_ts": "2026-05-12T09:18:00Z", "user_id": "U04ALEXK", "text": "oh interesting, we hit something similar on the FE side last quarter — naming consistency is a pain"},
+    {"msg_id": "S019", "channel": "db-migration", "ts": "2026-05-12T09:27:00Z", "thread_ts": "2026-05-12T09:18:00Z", "user_id": "U05JAMIE", "text": "Alex, can you share that doc?"},
+    {"msg_id": "S020", "channel": "db-migration", "ts": "2026-05-12T09:29:00Z", "thread_ts": "2026-05-12T09:18:00Z", "user_id": "U03ALEXR", "text": "sure: https://wiki.acme.com/db/indexes"},
+    {"msg_id": "S021", "channel": "db-migration", "ts": "2026-05-12T09:30:00Z", "thread_ts": "2026-05-12T09:18:00Z", "user_id": "U05JAMIE", "text": "ty"},
+
+    {"msg_id": "S022", "channel": "dm:U06SAM-U08DEVON", "ts": "2026-05-12T11:42:00Z", "user_id": "U08DEVON", "text": "saw Jamie passed the dry-run to you — you good?"},
+    {"msg_id": "S023", "channel": "dm:U06SAM-U08DEVON", "ts": "2026-05-12T11:50:00Z", "user_id": "U06SAM", "text": "yeah I'll pick it up, aiming for Thursday."},
+    {"msg_id": "S024", "channel": "dm:U06SAM-U08DEVON", "ts": "2026-05-12T11:51:00Z", "user_id": "U08DEVON", "text": "👍 ping me if you need anything"},
+
+    {"msg_id": "S025", "channel": "db-migration", "ts": "2026-05-12T14:22:00Z", "user_id": "U02PRIYA", "text": "@here who can pair with Sam on the dry-run Thursday morning?"},
+    {"msg_id": "S026", "channel": "db-migration", "ts": "2026-05-12T14:25:00Z", "user_id": "U03ALEXR", "text": "I think I'll probably get to it if nothing else comes up"},
+    {"msg_id": "S027", "channel": "db-migration", "ts": "2026-05-12T14:27:00Z", "user_id": "U02PRIYA", "text": "actually I got it, makes sense since I wrote the schema"},
+    {"msg_id": "S028", "channel": "db-migration", "ts": "2026-05-12T14:28:00Z", "user_id": "U06SAM", "text": "🙏 thanks Priya"},
+    {"msg_id": "S029", "channel": "db-migration", "ts": "2026-05-12T14:29:00Z", "user_id": "U06SAM", "text": "let's plan for 9am Thursday?"},
+    {"msg_id": "S030", "channel": "db-migration", "ts": "2026-05-12T14:30:00Z", "user_id": "U02PRIYA", "text": "9am works"},
+
+    {"msg_id": "S031", "channel": "db-migration", "ts": "2026-05-12T16:02:00Z", "user_id": "U04ALEXK", "text": "did anyone catch the platform conf keynote yesterday?", "_note": "filler"},
+    {"msg_id": "S032", "channel": "db-migration", "ts": "2026-05-12T16:04:00Z", "user_id": "U05JAMIE", "text": "missed it, link?", "_note": "filler"},
+    {"msg_id": "S033", "channel": "db-migration", "ts": "2026-05-12T16:05:00Z", "user_id": "U04ALEXK", "text": "https://example.com/keynote — first 20 min is the good stuff", "_note": "filler"},
+    {"msg_id": "S034", "channel": "db-migration", "ts": "2026-05-12T16:06:00Z", "user_id": "U05JAMIE", "text": "ty", "_note": "filler"},
+
+    {"msg_id": "S035", "channel": "dm:U02PRIYA-U08DEVON", "ts": "2026-05-13T08:55:00Z", "user_id": "U02PRIYA", "text": "heads up, schema diff is going to slip to Thursday — the partial index thing turned out to be a rabbit hole"},
+    {"msg_id": "S036", "channel": "dm:U02PRIYA-U08DEVON", "ts": "2026-05-13T08:58:00Z", "user_id": "U08DEVON", "text": "ok thanks for the heads up. need any help?"},
+    {"msg_id": "S037", "channel": "dm:U02PRIYA-U08DEVON", "ts": "2026-05-13T09:01:00Z", "user_id": "U02PRIYA", "text": "I think I've got it, will know more by EOD"},
+
+    {"msg_id": "S038", "channel": "db-migration", "ts": "2026-05-13T11:30:00Z", "user_id": "U02PRIYA", "text": "FYI schema diff slipping to Thursday — hit a snag with partial indexes, will have it by EOD tomorrow"},
+    {"msg_id": "S039", "channel": "db-migration", "ts": "2026-05-13T11:33:00Z", "user_id": "U03ALEXR", "text": "ack"},
+    {"msg_id": "S040", "channel": "db-migration", "ts": "2026-05-13T11:34:00Z", "user_id": "U06SAM", "text": "👍"},
+
+    {"msg_id": "S041", "channel": "db-migration", "ts": "2026-05-13T15:10:00Z", "user_id": "U05JAMIE", "text": "I'm freed up again from the incident review — if Sam wants me to take the dry-run back I can"},
+    {"msg_id": "S042", "channel": "db-migration", "ts": "2026-05-13T15:14:00Z", "user_id": "U06SAM", "text": "appreciate it but I've got it, just slipping a day"},
+    {"msg_id": "S043", "channel": "db-migration", "ts": "2026-05-13T15:15:00Z", "user_id": "U05JAMIE", "text": "cool, lmk if that changes"},
+
+    {"msg_id": "S044", "channel": "db-migration", "ts": "2026-05-13T17:20:00Z", "user_id": "U04ALEXK", "text": "anyone else getting a weird CORS error on staging?", "_note": "filler"},
+    {"msg_id": "S045", "channel": "db-migration", "ts": "2026-05-13T17:22:00Z", "user_id": "U07MAYA", "text": "wrong channel Alex 😄 try #frontend-help", "_note": "filler — 'Alex' resolves to Alex Kim (the speaker)"},
+    {"msg_id": "S046", "channel": "db-migration", "ts": "2026-05-13T17:23:00Z", "user_id": "U04ALEXK", "text": "oops 😅 sorry!", "_note": "filler"},
+
+    {"msg_id": "S047", "channel": "db-migration", "ts": "2026-05-14T09:02:00Z", "user_id": "U08DEVON", "text": "morning — heads up I'll be in the all-hands at 11, ping me on slack if urgent"},
+    {"msg_id": "S048", "channel": "db-migration", "ts": "2026-05-14T09:04:00Z", "user_id": "U06SAM", "text": "👍"},
+
+    {"msg_id": "S049", "channel": "db-migration", "ts": "2026-05-14T12:48:00Z", "user_id": "U04ALEXK", "text": "btw if you need someone to QA the FE after the migration, ping me — Maya knows how to reach me"},
+    {"msg_id": "S050", "channel": "db-migration", "ts": "2026-05-14T12:50:00Z", "user_id": "U07MAYA", "text": "appreciated Alex 🙏"},
+    {"msg_id": "S051", "channel": "db-migration", "ts": "2026-05-14T12:51:00Z", "user_id": "U02PRIYA", "text": "will keep that in mind"},
+
+    {"msg_id": "S052", "channel": "db-migration", "ts": "2026-05-14T14:00:00Z", "user_id": "U08DEVON", "text": "reminder: stakeholder review tomorrow 2pm 📅", "_note": "filler"},
+    {"msg_id": "S053", "channel": "db-migration", "ts": "2026-05-14T14:01:00Z", "user_id": "U06SAM", "text": "noted", "_note": "filler"},
+    {"msg_id": "S054", "channel": "db-migration", "ts": "2026-05-14T14:02:00Z", "user_id": "U02PRIYA", "text": "🫡", "_note": "filler"},
+
+    {"msg_id": "S055", "channel": "db-migration", "ts": "2026-05-14T16:30:00Z", "user_id": "U06SAM", "text": "Priya, confirming 9am tomorrow for the dry-run pairing?"},
+    {"msg_id": "S056", "channel": "db-migration", "ts": "2026-05-14T16:32:00Z", "user_id": "U02PRIYA", "text": "yep 9am, see you in the staging channel"},
+    {"msg_id": "S057", "channel": "db-migration", "ts": "2026-05-14T16:33:00Z", "user_id": "U06SAM", "text": "🙏"},
+    {"msg_id": "S058", "channel": "db-migration", "ts": "2026-05-14T16:45:00Z", "user_id": "U03ALEXR", "text": "Doc on the index changes is up: https://docs.acme.com/migrate/indexes-v2 — Jordan signed off"},
+    {"msg_id": "S059", "channel": "db-migration", "ts": "2026-05-14T16:48:00Z", "user_id": "U08DEVON", "text": "thanks all — looking forward to tomorrow"}
+  ]
+}

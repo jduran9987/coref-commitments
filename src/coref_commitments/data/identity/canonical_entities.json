@@ -1,0 +1,137 @@
+{
+  "entities": [
+    {
+      "canonical_id": "person_priya_patel",
+      "full_name": "Priya Patel",
+      "preferred_name": "Priya",
+      "pronouns": "she/her",
+      "department": "Platform Engineering",
+      "title": "Senior Software Engineer",
+      "active": true,
+      "manager_canonical_id": "person_maya_chen",
+      "identities": {
+        "email_primary": "priya.patel@acme.com",
+        "slack_user_id": "U02PRIYA",
+        "slack_username": "priya.p",
+        "slack_display_name": "Priya",
+        "linear_user_id": "linear_user_priya",
+        "linear_name": "Priya Patel",
+        "linear_handle": "priya-p"
+      }
+    },
+    {
+      "canonical_id": "person_alex_rodriguez",
+      "full_name": "Alex Rodriguez",
+      "preferred_name": "Alex",
+      "pronouns": null,
+      "department": "Platform Engineering",
+      "title": "Senior Software Engineer",
+      "active": true,
+      "manager_canonical_id": "person_maya_chen",
+      "identities": {
+        "email_primary": "alex.rodriguez@acme.com",
+        "slack_user_id": "U03ALEXR",
+        "slack_username": "alex.r",
+        "slack_display_name": "Alex",
+        "linear_user_id": "linear_user_alexr",
+        "linear_name": "Alex Rodriguez",
+        "linear_handle": "alex-r"
+      }
+    },
+    {
+      "canonical_id": "person_alex_kim",
+      "full_name": "Alex Kim",
+      "preferred_name": "Alex",
+      "pronouns": "they/them",
+      "department": "Frontend Engineering",
+      "title": "Software Engineer",
+      "active": true,
+      "manager_canonical_id": null,
+      "identities": {
+        "email_primary": "alex.kim@acme.com",
+        "slack_user_id": "U04ALEXK",
+        "slack_username": "alex.k",
+        "slack_display_name": "Alex",
+        "linear_user_id": "linear_user_alexk",
+        "linear_name": "Alex Kim",
+        "linear_handle": "alex-k"
+      }
+    },
+    {
+      "canonical_id": "person_jamie_wu",
+      "full_name": "Jamie Wu",
+      "preferred_name": "Jamie",
+      "pronouns": null,
+      "department": "Platform Engineering",
+      "title": "Software Engineer",
+      "active": true,
+      "manager_canonical_id": "person_maya_chen",
+      "identities": {
+        "email_primary": "jamie.wu@acme.com",
+        "slack_user_id": "U05JAMIE",
+        "slack_username": "jamie.w",
+        "slack_display_name": "Jamie",
+        "linear_user_id": "linear_user_jamie",
+        "linear_name": "Jamie Wu",
+        "linear_handle": "jamie-w"
+      }
+    },
+    {
+      "canonical_id": "person_sam_okafor",
+      "full_name": "Sam Okafor",
+      "preferred_name": "Sam",
+      "pronouns": null,
+      "department": "Platform Engineering",
+      "title": "Software Engineer",
+      "active": true,
+      "manager_canonical_id": "person_maya_chen",
+      "identities": {
+        "email_primary": "sam.okafor@acme.com",
+        "slack_user_id": "U06SAM",
+        "slack_username": "sam.o",
+        "slack_display_name": "Sam",
+        "linear_user_id": "linear_user_sam",
+        "linear_name": "Sam Okafor",
+        "linear_handle": "sam-o"
+      }
+    },
+    {
+      "canonical_id": "person_maya_chen",
+      "full_name": "Mei-Ling Chen",
+      "preferred_name": "Maya",
+      "pronouns": "she/her",
+      "department": "Platform Engineering",
+      "title": "Engineering Manager",
+      "active": true,
+      "manager_canonical_id": null,
+      "identities": {
+        "email_primary": "mei-ling.chen@acme.com",
+        "slack_user_id": "U07MAYA",
+        "slack_username": "mei-ling.c",
+        "slack_display_name": "Maya",
+        "linear_user_id": "linear_user_mchen",
+        "linear_name": "Mei-Ling Chen",
+        "linear_handle": "mchen"
+      }
+    },
+    {
+      "canonical_id": "person_devon_brooks",
+      "full_name": "Devon Brooks",
+      "preferred_name": "Devon",
+      "pronouns": null,
+      "department": "Platform Product",
+      "title": "Senior Product Manager",
+      "active": true,
+      "manager_canonical_id": null,
+      "identities": {
+        "email_primary": "devon.brooks@acme.com",
+        "slack_user_id": "U08DEVON",
+        "slack_username": "devon.b",
+        "slack_display_name": "Devon",
+        "linear_user_id": "linear_user_devon",
+        "linear_name": "Devon Brooks",
+        "linear_handle": "devon-b"
+      }
+    }
+  ]
+}
