@@ -20,23 +20,100 @@ We're building an **action-item tracker** that pulls commitments from Slack, ema
 
 ### Scenario
 
-The project simulates 72 hours of activity at a fictional company (Acme) where the Platform engineering team is in the middle of a Postgres 14 → 16 migration. There's a stakeholder review Friday afternoon. Three workstreams are running in parallel: a schema diff (Priya), an index strategy review with an external consultant (Alex Rodriguez), and a staging dry-run (initially Jamie, transferred mid-week to Sam).
+The project simulates 72 hours of activity at Acme, a fictional company, where the Platform engineering team is two weeks into a Postgres 14 → 16 migration. There's a stakeholder review Friday afternoon. Three workstreams are running in parallel: a schema diff, an index strategy review with an external consultant, and a staging dry-run.
 
-The cast — seven internal employees and one external consultant — is designed to exercise every coreference case the system needs to handle. **Alex Rodriguez** (Platform) shares a first name with **Alex Kim** (Frontend), creating routine disambiguation work. **Maya Chen**, the engineering manager, has the legal name "Mei-Ling Chen" — her Slack display name says "Maya" but her email and Linear records use "Mei-Ling," so the system must match these to a single canonical person. **Devon Brooks** (PM) tracks the project. **Jordan Reyes**, an external Postgres consultant, appears only in email and has no record in any of the company's internal systems.
+The cast:
 
-Across the 72 hours, the data exercises:
+- **Priya Patel** — Platform engineer, owns the schema diff
+- **Alex Rodriguez** — Platform engineer, owns the index strategy review
+- **Alex Kim** — *Frontend* engineer, occasional drive-by participant; shares a first name with Alex Rodriguez
+- **Jamie Wu** — Platform engineer, initially owns the staging dry-run
+- **Sam Okafor** — Platform engineer, takes over the dry-run mid-week
+- **Maya Chen** — Platform engineering manager; legal name Mei-Ling Chen, Slack shows "Maya", email and Linear use the legal name
+- **Devon Brooks** — Product manager tracking the project
+- **Jordan Reyes** — External Postgres consultant, appears only in email; no internal canonical identity
 
-- Speaker resolution across three tools (same person, three different IDs per system)
-- Within-thread pronoun resolution
-- First-name disambiguation when multiple people share a name
-- Implicit assignment (*"@here who can help?"* → *"I got it"*)
-- Ownership transfer with cross-tool confirmation
-- Transfer offered but declined — should *not* move the commitment back
-- Due-date updates on existing commitments vs new commitments
-- Status updates rolling up to existing commitments
-- External unknowns (Jordan, no canonical record)
-- Preferred-name vs legal-name divergence
-- Deliberate non-commitments — hedges, conditional offers, permission-granting — that look like commitments to a naive extractor
+#### Monday — kickoff
+
+Devon opens the umbrella Linear ticket with the week's plan; the team self-assigns to workstreams; Jordan is looped in by email.
+
+**Active entities:** Devon, Maya, Priya, Alex Rodriguez, Jamie, Sam, Alex Kim, Jordan
+
+**Commitments created:**
+- Priya → schema diff by Wed EOD *(Slack)*
+- Alex Rodriguez → index strategy review by Fri *(Slack + Linear)*
+- Jamie → staging dry-run by Thu *(Slack + Linear)*
+- Jordan → review notes by Thu *(Email)*
+
+**Non-commitments:**
+- Sam: *"I can help wherever needed"* — soft offer, no specific task
+- Alex Kim: *"happy to help if you need a frontend perspective"* — general offer
+
+**Coreference challenges:**
+- Alex Kim's first appearance establishes the two-Alex collision for the rest of the week
+- Jordan has no canonical entity — must be handled as an external sender
+
+#### Tuesday — the messy middle
+
+The two-Alex collision goes live in a Slack thread. Jamie transfers the dry-run to Sam. Priya picks up a second commitment implicitly. Jordan and Alex schedule a call by email.
+
+**Active entities:** Priya, Alex Rodriguez, Alex Kim, Jamie, Sam, Devon, Jordan
+
+**Commitments created:**
+- Sam → staging dry-run by Thu *(Slack DM with Devon)* — transferred from Jamie
+- Priya → pair with Sam on dry-run, Thu 9am *(Slack, implicit self-assignment)*
+
+**Commitment modifications:**
+- ENG-451: ownership transfer Jamie → Sam *(Linear comment + Slack DM confirmation across tools)*
+
+**Non-commitments:**
+- Alex Rodriguez: *"I think I'll probably get to it if nothing else comes up"* — hedged
+
+**Coreference challenges:**
+- *"Quick q for Alex"* (Priya) → Alex Rodriguez, resolvable by thread context (he owns indexes)
+- *"Alex, can you share that doc?"* (Jamie) → genuinely **ambiguous** — both Alexes are active in the thread
+- Sam's *"I'll pick it up"* (Slack DM) must dedupe against Jamie's *"Sam is handling this now"* (Linear) — same commitment, two tools
+
+#### Wednesday — slippage and a declined transfer-back
+
+Schema diff slips a day. Sam hits a snag and gets permission from Maya to push. Jamie offers to take the dry-run back; Sam declines. Alex Rodriguez completes the index strategy work by email.
+
+**Active entities:** Priya, Devon, Sam, Maya, Jamie, Alex Rodriguez, Jordan, Alex Kim
+
+**Commitments created:**
+- Alex Rodriguez → update proposal doc tonight *(Email)* — completed same evening
+
+**Commitment modifications:**
+- Priya's schema diff: due date Wed → Thu *(Slack DM, then channel announcement)*
+- Sam's dry-run: due date Thu → Fri AM *(Linear comment, with permission from Maya)*
+- Sam's dry-run: transfer back to Jamie offered and **declined** — commitment stays with Sam
+
+**Non-commitments:**
+- Maya: *"Friday AM is fine if it has to slip"* — permission, not a commitment
+- Jamie: *"if Sam wants me to take the dry-run back I can"* — offer, declined
+
+**Coreference challenges:**
+- Priya's DM update + channel announcement should match the *same* existing commitment, not create a duplicate
+- Sam tags *"Maya"* on Linear — must resolve to Mei-Ling Chen (Linear stores the legal name)
+
+#### Thursday — convergence
+
+Devon checks status. Three engineers reply with updates on existing work. Jordan signs off. Alex Kim makes another conditional offer.
+
+**Active entities:** Devon, Priya, Sam, Alex Rodriguez, Jordan, Alex Kim, Maya
+
+**Commitments created:** none
+
+**Commitment modifications:**
+- Status updates on ENG-447 *(Linear)* roll up to existing commitments — schema diff, dry-run, index strategy — not new commitments
+- Sam's *"Confirmed pairing with Priya at 9am Friday"* *(Linear)* and the matching Slack exchange reference the same existing commitment
+
+**Non-commitments:**
+- Alex Kim: *"if you need someone to QA the FE after the migration, ping me — Maya knows how to reach me"* — conditional
+
+**Coreference challenges:**
+- Three status replies on ENG-447 must each match the right existing commitment by owner + task similarity
+- *"Maya knows how to reach me"* — name reference (no pronoun), resolves via `slack_display_name`
 
 The expected output is a Slack DM digest delivered to each engineer Friday morning, listing their open commitments and what others owe them, with each row linked back to the source message.
 
