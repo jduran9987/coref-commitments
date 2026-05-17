@@ -1,0 +1,203 @@
+{
+  "commitments": [
+    {
+      "commitment_id": "c_001",
+      "owner": "person_priya_patel",
+      "owed_to": ["channel:db-migration"],
+      "task": "schema diff for Postgres 14→16 migration",
+      "due": "2026-05-13",
+      "status": "open",
+      "source_message_ref": {"source": "slack", "msg_id": "S001"},
+      "confidence": "high"
+    },
+    {
+      "commitment_id": "c_002",
+      "owner": "person_alex_rodriguez",
+      "owed_to": ["channel:db-migration"],
+      "task": "index strategy review with Jordan for Postgres 16",
+      "due": "2026-05-15",
+      "status": "open",
+      "source_message_ref": {"source": "slack", "msg_id": "S002"},
+      "confidence": "medium",
+      "confidence_note": "Due date inferred from Devon's plan in L001 (posted 34 min earlier same day); not stated in S002 itself."
+    },
+    {
+      "commitment_id": "c_003",
+      "owner": "person_jamie_wu",
+      "owed_to": ["channel:db-migration"],
+      "task": "staging dry-run for Postgres migration",
+      "due": "2026-05-14",
+      "status": "open",
+      "source_message_ref": {"source": "slack", "msg_id": "S003"},
+      "confidence": "high"
+    },
+    {
+      "commitment_id": "c_004",
+      "owner": "external_unknown",
+      "external_id": "email:jordan@pgconsult.io",
+      "external_label": "Jordan Reyes",
+      "owed_to": ["person_alex_rodriguez", "person_priya_patel"],
+      "task": "send review notes on index strategy proposal",
+      "due": "2026-05-14",
+      "status": "open",
+      "source_message_ref": {"source": "email", "msg_id": "E002"},
+      "confidence": "high"
+    },
+    {
+      "commitment_id": "c_005",
+      "owner": "person_priya_patel",
+      "owed_to": ["person_sam_okafor", "channel:db-migration"],
+      "task": "pair with Sam on staging dry-run",
+      "due": "2026-05-14",
+      "status": "open",
+      "source_message_ref": {"source": "slack", "msg_id": "S027"},
+      "confidence": "medium",
+      "confidence_note": "Implicit assignment via S027 ('actually I got it'); specific time (9am Thursday) fixed in S029/S030. Due cascades to 2026-05-15 once c_003 slips — see m_011."
+    }
+  ],
+  "modification_events": [
+    {
+      "event_id": "m_001",
+      "commitment_id": "c_001",
+      "type": "due_date_update",
+      "new_due": "2026-05-14",
+      "source_message_ref": {"source": "slack", "msg_id": "S035"},
+      "confidence": "high",
+      "confidence_note": "DM to Devon (S035) is originating message; S038 is the same update restated in channel ~2.5h later — not a separate event per decision #7."
+    },
+    {
+      "event_id": "m_002",
+      "commitment_id": "c_001",
+      "type": "status_update",
+      "new_status": "in_progress",
+      "source_message_ref": {"source": "linear", "msg_id": "L004"},
+      "confidence": "high"
+    },
+    {
+      "event_id": "m_003",
+      "commitment_id": "c_002",
+      "type": "status_update",
+      "new_status": "in_progress",
+      "source_message_ref": {"source": "linear", "msg_id": "L013"},
+      "confidence": "high"
+    },
+    {
+      "event_id": "m_004",
+      "commitment_id": "c_002",
+      "type": "status_update",
+      "new_status": "in_progress",
+      "source_message_ref": {"source": "email", "msg_id": "E006"},
+      "confidence": "high",
+      "confidence_note": "E006 announces the post-call plan change and the sub-task 'update the proposal doc tonight' — per decision #1, doc update rolls up here as status_update on c_002, not as a new commitment."
+    },
+    {
+      "event_id": "m_005",
+      "commitment_id": "c_002",
+      "type": "status_update",
+      "new_status": "in_progress",
+      "source_message_ref": {"source": "email", "msg_id": "E007"},
+      "confidence": "high",
+      "confidence_note": "Doc-update sub-task delivered; c_002 still awaiting Jordan's sign-off."
+    },
+    {
+      "event_id": "m_006",
+      "commitment_id": "c_002",
+      "type": "status_update",
+      "new_status": "completed",
+      "source_message_ref": {"source": "email", "msg_id": "E008"},
+      "confidence": "high",
+      "confidence_note": "Jordan's sign-off completes c_002. L006 (Alex on Linear) and S058 (Alex in channel) are cross-tool restatements — not separate events per decision #7."
+    },
+    {
+      "event_id": "m_007",
+      "commitment_id": "c_003",
+      "type": "ownership_transfer",
+      "new_owner": "person_sam_okafor",
+      "source_message_ref": {"source": "linear", "msg_id": "L008"},
+      "resolution_message_ref": {"source": "slack", "msg_id": "S023"},
+      "confidence": "high",
+      "confidence_note": "Transfer announced by Jamie on Linear (L008); Sam accepts via DM to Devon (S023) and on the ticket (L011). Acceptances rolled into this single event per decision #7."
+    },
+    {
+      "event_id": "m_008",
+      "commitment_id": "c_003",
+      "type": "due_date_update",
+      "new_due": "2026-05-15",
+      "source_message_ref": {"source": "linear", "msg_id": "L011"},
+      "confidence": "medium",
+      "confidence_note": "L009 raised the possibility ('might need to push'); L010 was Maya's permission; L011 is Sam's firm ETA update. Anchored to L011 as the moment the slip became a commitment, not L009."
+    },
+    {
+      "event_id": "m_009",
+      "commitment_id": "c_003",
+      "type": "transfer_declined",
+      "source_message_ref": {"source": "slack", "msg_id": "S041"},
+      "resolution_message_ref": {"source": "slack", "msg_id": "S042"},
+      "confidence": "high"
+    },
+    {
+      "event_id": "m_010",
+      "commitment_id": "c_004",
+      "type": "status_update",
+      "new_status": "completed",
+      "source_message_ref": {"source": "email", "msg_id": "E003"},
+      "confidence": "high",
+      "confidence_note": "Jordan delivered notes Tuesday afternoon, two days ahead of the Thursday due date."
+    },
+    {
+      "event_id": "m_011",
+      "commitment_id": "c_005",
+      "type": "due_date_update",
+      "new_due": "2026-05-15",
+      "source_message_ref": {"source": "slack", "msg_id": "S056"},
+      "confidence": "medium",
+      "confidence_note": "Slip cascades implicitly from c_003 (m_008). Explicit re-confirmation happens in S055/S056; L012 is cross-tool restatement of the same confirmation."
+    },
+    {
+      "event_id": "m_012",
+      "commitment_id": "c_005",
+      "type": "status_update",
+      "new_status": "in_progress",
+      "source_message_ref": {"source": "linear", "msg_id": "L004"},
+      "confidence": "high",
+      "confidence_note": "Same Linear comment as m_002 — L004 references both c_001 and c_005 ('Schema diff lands today, pairing with Sam in the AM')."
+    }
+  ],
+  "non_commitments": [
+    {
+      "source_message_ref": {"source": "slack", "msg_id": "S004"},
+      "reason": "Soft offer without specific task — 'I can help wherever needed.' Same modal as S003 but no concrete deliverable. Closest call in the data.",
+      "confidence": "medium"
+    },
+    {
+      "source_message_ref": {"source": "slack", "msg_id": "S009"},
+      "reason": "Adversarial 'I'll' that's idiomatic skepticism, not a promise — 'I'll believe it when I see it.' Planted to test that the pipeline doesn't pattern-match on 'I'll'.",
+      "confidence": "high"
+    },
+    {
+      "source_message_ref": {"source": "slack", "msg_id": "S010"},
+      "reason": "Conditional offer — 'happy to help if you need a frontend perspective on the rollout.' No task accepted unless invited.",
+      "confidence": "high"
+    },
+    {
+      "source_message_ref": {"source": "slack", "msg_id": "S026"},
+      "reason": "Hedged with an explicit escape clause — 'I think I'll probably get to it if nothing else comes up.' Per decision #1, escape clauses disqualify.",
+      "confidence": "high"
+    },
+    {
+      "source_message_ref": {"source": "slack", "msg_id": "S041"},
+      "reason": "Conditional transfer offer — 'if Sam wants me to take the dry-run back I can.' Declined in S042. Recorded as m_009 (transfer_declined) against c_003, but the message itself does not mint a new commitment.",
+      "confidence": "high"
+    },
+    {
+      "source_message_ref": {"source": "slack", "msg_id": "S049"},
+      "reason": "Conditional offer — 'if you need someone to QA the FE after the migration, ping me.' Mirrors S010 from the same speaker.",
+      "confidence": "high"
+    },
+    {
+      "source_message_ref": {"source": "linear", "msg_id": "L010"},
+      "reason": "Permission-granting, not commitment — 'Friday AM is fine if it has to slip.' Maya is approving Sam's request, not promising anything herself.",
+      "confidence": "high"
+    }
+  ]
+}
