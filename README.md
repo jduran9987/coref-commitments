@@ -35,14 +35,16 @@ The cast:
 
 #### Monday — kickoff
 
-Devon opens the umbrella Linear ticket with the week's plan; the team self-assigns to workstreams; Jordan is looped in by email.
+Devon kicks off the week with a comment on the umbrella Linear ticket (ENG-447) laying out the plan: schema diff by Wednesday EOD, index review by Friday, dry-run by Thursday. Maya endorses. In Slack `#db-migration`, Priya self-assigns to the schema diff, Alex Rodriguez takes the index strategy review, and Jamie picks up the staging dry-run; Sam chimes in with a vague offer to help wherever needed but doesn't commit to a specific task.
+
+Later in the afternoon, Alex Kim — an engineer from the Frontend team who shares a first name with Alex Rodriguez — drops into `#db-migration` offering a frontend perspective if needed. By email, Alex Rodriguez loops in Jordan Reyes, the external Postgres consultant; Jordan replies committing to send review notes by Thursday.
 
 **Active entities:** Devon, Maya, Priya, Alex Rodriguez, Jamie, Sam, Alex Kim, Jordan
 
 **Commitments created:**
 - Priya → schema diff by Wed EOD *(Slack)*
-- Alex Rodriguez → index strategy review by Fri *(Slack + Linear)*
-- Jamie → staging dry-run by Thu *(Slack + Linear)*
+- Alex Rodriguez → index strategy review by Fri *(Slack + Linear ENG-462)*
+- Jamie → staging dry-run by Thu *(Slack + Linear ENG-451)*
 - Jordan → review notes by Thu *(Email)*
 
 **Non-commitments:**
@@ -50,12 +52,16 @@ Devon opens the umbrella Linear ticket with the week's plan; the team self-assig
 - Alex Kim: *"happy to help if you need a frontend perspective"* — general offer
 
 **Coreference challenges:**
-- Alex Kim's first appearance establishes the two-Alex collision for the rest of the week
+- Both Alexes are now active in `#db-migration` — future references to "Alex" will need disambiguation
 - Jordan has no canonical entity — must be handled as an external sender
 
 #### Tuesday — the messy middle
 
-The two-Alex collision goes live in a Slack thread. Jamie transfers the dry-run to Sam. Priya picks up a second commitment implicitly. Jordan and Alex schedule a call by email.
+In a `#db-migration` thread, Priya opens with *"Quick q for Alex"* about partial-index naming. Alex Rodriguez answers (he owns the index work); Alex Kim chimes in with a tangential frontend remark. Jamie follows up with *"Alex, can you share that doc?"* — genuinely ambiguous now that both Alexes are active in the thread.
+
+Jamie gets pulled into an unrelated incident review and posts on ENG-451: *"Sam is handling this now."* Sam doesn't acknowledge on the ticket. Devon DMs Sam to confirm the transfer; Sam agrees: *"yeah I'll pick it up, aiming for Thursday."* Back in `#db-migration`, Priya asks who can pair with Sam on the dry-run Thursday morning. Alex Rodriguez hedges — *"I think I'll probably get to it if nothing else comes up"* — and Priya then takes it herself: *"actually I got it."* She now owns both the schema diff and the pairing task.
+
+By email, Jordan raises a concern with the composite index proposal — the selectivity on tenant_id is too low for the hot query — and suggests a call. Alex Rodriguez and Jordan schedule for Wednesday 2pm.
 
 **Active entities:** Priya, Alex Rodriguez, Alex Kim, Jamie, Sam, Devon, Jordan
 
@@ -70,15 +76,21 @@ The two-Alex collision goes live in a Slack thread. Jamie transfers the dry-run 
 - Alex Rodriguez: *"I think I'll probably get to it if nothing else comes up"* — hedged
 
 **Coreference challenges:**
-- *"Quick q for Alex"* (Priya) → Alex Rodriguez, resolvable by thread context (he owns indexes)
+- *"Quick q for Alex"* (Priya) → Alex Rodriguez, resolvable by thread context (he owns the index work)
 - *"Alex, can you share that doc?"* (Jamie) → genuinely **ambiguous** — both Alexes are active in the thread
 - Sam's *"I'll pick it up"* (Slack DM) must dedupe against Jamie's *"Sam is handling this now"* (Linear) — same commitment, two tools
 
 #### Wednesday — slippage and a declined transfer-back
 
-Schema diff slips a day. Sam hits a snag and gets permission from Maya to push. Jamie offers to take the dry-run back; Sam declines. Alex Rodriguez completes the index strategy work by email.
+Priya DMs Devon: *"heads up, schema diff is going to slip to Thursday — the partial index thing turned out to be a rabbit hole."* She announces it again in `#db-migration` shortly after; both messages refer to the same existing commitment, just shared with different audiences.
 
-**Active entities:** Priya, Devon, Sam, Maya, Jamie, Alex Rodriguez, Jordan, Alex Kim
+On ENG-451, Sam reports a replication-lag snag and tags *"Maya"* asking whether pushing to Friday morning is acceptable given the review. Maya grants permission — *"Friday AM is fine if it has to slip, but loop me in earlier next time"* — but doesn't take on a task of her own. Sam updates the ETA on the ticket.
+
+Jamie, freed up from the incident review, offers in Slack to take the dry-run back: *"if Sam wants me to take the dry-run back I can."* Sam declines: *"appreciate it but I've got it, just slipping a day."* The commitment stays with Sam.
+
+After the index call, Alex Rodriguez emails Jordan and Priya summarizing the new approach — dropping the composite index in favor of two single-column indexes plus a partial — commits to updating the proposal doc that night, and follows up later with the updated link. He mirrors the same update on ENG-462.
+
+**Active entities:** Priya, Devon, Sam, Maya, Jamie, Alex Rodriguez, Jordan
 
 **Commitments created:**
 - Alex Rodriguez → update proposal doc tonight *(Email)* — completed same evening
@@ -98,7 +110,11 @@ Schema diff slips a day. Sam hits a snag and gets permission from Maya to push. 
 
 #### Thursday — convergence
 
-Devon checks status. Three engineers reply with updates on existing work. Jordan signs off. Alex Kim makes another conditional offer.
+Devon posts a status check on ENG-447 ahead of Friday's stakeholder review: *"where are we?"* Three replies follow. Priya: schema diff lands today, pairing with Sam in the AM. Sam: dry-run pushed to Fri AM, but on track for the review. Alex Rodriguez: index strategy locked, doc updated, Jordan signed off. Each reply updates an existing commitment rather than introducing a new one.
+
+By email, Jordan signs off on the updated index doc; Priya thanks Jordan and notes she'll fold the changes into the schema diff today. Alex Kim returns to `#db-migration` with a conditional offer to QA the frontend after the migration — *"ping me, Maya knows how to reach me"* — and Maya briefly acknowledges. In the afternoon, Sam confirms the 9am Friday pairing with Priya in both Slack and on ENG-451, referencing the same existing arrangement.
+
+The 72-hour window closes.
 
 **Active entities:** Devon, Priya, Sam, Alex Rodriguez, Jordan, Alex Kim, Maya
 
