@@ -37,11 +37,90 @@ The ground-truth workflow:
 
 **Canonical entities** (v1 scope): people and Linear tickets only. No teams, channels, or departments as canonical entities. Promoting channels to canonical entities would require a new resolver path for entities with no aliasing problem — not worth it at this stage.
 
-**Reserved namespaces** in `owed_to` fields:
-- `channel:db-migration` — broadcast commitment to a channel; not a canonical entity
-- `external:email:jordan@pgconsult.io` — commitment owed to an external; not in the identity store
+**External resolution**: People absent from the canonical identity store resolve as `external_unknown`. Jordan Reyes (`jordan@pgconsult.io`) is the deliberate external in v1. The identity store must not be augmented with magic aliases or observational shortcuts.
 
-**External resolution**: People absent from the canonical identity store resolve as `external_unknown`. Jordan Reyes (`jordan@pgconsult.io`) is the deliberate external in v1. Commitment rows where an external is the owner carry `owner: "external_unknown"`, `external_id`, and `external_label`. The identity store must not be augmented with magic aliases or observational shortcuts.
+### Reserved namespaces
+
+String labels used in `owed_to` fields — these are not canonical entity IDs:
+
+| Namespace | Example | Meaning |
+|-----------|---------|---------|
+| `channel:*` | `channel:db-migration` | Commitment made to a whole channel; not a canonical entity |
+| `external:*` | `external:email:jordan@pgconsult.io` | Commitment owed to a person outside the identity store; not a canonical entity |
+
+### `mentions_truth.json` schema
+
+**Message row** — one per message (82 total):
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `msg_id` | string | yes | Message ID matching the source file (e.g. `S019`, `E004`, `L008`) |
+| `source` | enum | yes | `slack`, `email`, or `linear` |
+| `sender_canonical_id` | string | yes | Canonical ID of the message sender, or `external_unknown` for externals |
+| `is_filler` | boolean | yes | True for off-topic messages tagged `_note: "filler"` in the source. Filler rows always have `mentions: []` |
+| `mentions` | array | yes | List of mention objects; empty array when no annotatable mentions exist |
+
+**Mention object** — one per resolved surface form. Multiple tokens in one message collapse to one row per Decision 11:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `surface` | string | yes | The first surface form token ("I", "Alex", "you", etc.) |
+| `surface_count` | integer | no | Total tokens collapsed into this row. Omitted when 1 |
+| `category` | enum | yes | One of seven mention categories (see Mention categories section) |
+| `resolves_to` | string \| null | yes | Canonical ID of the resolved entity, `external_unknown` for externals, or `null` when ambiguous |
+| `candidates` | array | no | Present when `resolves_to` is null; lists the plausible canonical IDs |
+| `external_id` | string | no | Present when `resolves_to` is `external_unknown`; namespaced identifier (e.g. `email:jordan@pgconsult.io`) |
+| `external_label` | string | no | Display name for the external (e.g. `Jordan Reyes`) |
+| `note` | string | no | Annotation reasoning note; not used by the pipeline |
+
+### `commitments_truth.json` schema
+
+**Commitment row** — one per commitment (6 total):
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `commitment_id` | string | yes | Stable identifier (e.g. `c_001`) |
+| `owner` | string | yes | Canonical ID of the person who made the commitment, or `external_unknown` |
+| `external_id` | string | no | Present when `owner` is `external_unknown`; namespaced identifier |
+| `external_label` | string | no | Display name when owner is external |
+| `owed_to` | array | yes | List of canonical IDs, `channel:*` labels, or `external:*` labels the commitment is owed to |
+| `external_labels` | object | no | Present when `owed_to` contains external strings; maps each external string to a display name |
+| `task` | string | yes | Plain-language description of the committed deliverable |
+| `due` | date | yes | Due date in `YYYY-MM-DD` format |
+| `status` | enum | yes | `open`, `in_progress`, or `completed` — snapshot at time of authoring |
+| `source_message_ref` | object | yes | Pointer to the originating message (see `source_message_ref` below) |
+| `confidence` | enum | yes | `high` or `medium` |
+| `confidence_note` | string | no | Required when `confidence` is `medium`; explains the ambiguity |
+
+**Modification event** — one per change to an existing commitment (14 total). Type-specific fields apply depending on `type`:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `event_id` | string | yes | Stable identifier (e.g. `m_007`) |
+| `commitment_id` | string | yes | ID of the commitment this event modifies |
+| `type` | enum | yes | `due_date_update`, `ownership_transfer`, `status_update`, or `transfer_declined` |
+| `new_due` | date | no | Present for `due_date_update` events |
+| `new_owner` | string | no | Present for `ownership_transfer` events; canonical ID of the new owner |
+| `new_status` | enum | no | Present for `status_update` events; one of `in_progress`, `confirmed`, `completed` |
+| `source_message_ref` | object | yes | Pointer to the message that triggered the event |
+| `resolution_message_ref` | object | no | Present for `ownership_transfer` and `transfer_declined`; points to the acceptance or decline message |
+| `confidence` | enum | yes | `high` or `medium` |
+| `confidence_note` | string | no | Required when `confidence` is `medium` |
+
+**Non-commitment row** — adversarial cases the pipeline must not classify as commitments (7 total):
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `source_message_ref` | object | yes | Pointer to the message |
+| `reason` | string | yes | Explains why this message does not qualify as a commitment |
+| `confidence` | enum | yes | `high` or `medium` |
+
+**`source_message_ref` object** — used across all row types in both truth files:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `source` | enum | yes | `slack`, `email`, or `linear` |
+| `msg_id` | string | yes | Message ID matching the source file |
 
 ---
 

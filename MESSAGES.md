@@ -943,14 +943,13 @@ S059  Thu 16:48  Devon  #db-migration
 
 Mentions: none ("all" is a group address, out of scope per Mention Rule 2).
 
+## Totals
 
-==============================================================================
-TOTALS
-==============================================================================
-
-Commitments:         6 (c_001–c_006)
-Modification events: 14 (m_001–m_014)
-Non-commitments:     7 (S004, S009, S010, S026, S041, S049, L010)
-Filler messages:    16 (S007–S009, S013–S015, S031–S034, S044–S046, S052–S054)
-Restatements:       ~9 (L007, S023, S038, L005, L006, L012, L014, S058, S039→ack)
-Total messages:      82
+| Category | Count / Details |
+|---|---:|
+| Commitments | 6 (`c_001`–`c_006`) |
+| Modification events | 14 (`m_001`–`m_014`) |
+| Non-commitments | 7 (`S004`, `S009`, `S010`, `S026`, `S041`, `S049`, `L010`) |
+| Filler messages | 16 (`S007`–`S009`, `S013`–`S015`, `S031`–`S034`, `S044`–`S046`, `S052`–`S054`) |
+| Restatements | ~9 (`L007`, `S023`, `S038`, `L005`, `L006`, `L012`, `L014`, `S058`, `S039→ack`) |
+| Total messages | 82 |
