@@ -1,0 +1,967 @@
+{
+  "mentions": [
+    {
+      "msg_id": "S001",
+      "source": "slack",
+      "sender_canonical_id": "person_priya_patel",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I'm",
+          "surface_count": 2,
+          "category": "speaker_self_reference",
+          "resolves_to": "person_priya_patel"
+        }
+      ]
+    },
+    {
+      "msg_id": "S002",
+      "source": "slack",
+      "sender_canonical_id": "person_alex_rodriguez",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I'll",
+          "category": "speaker_self_reference",
+          "resolves_to": "person_alex_rodriguez"
+        },
+        {
+          "surface": "Jordan",
+          "category": "external_name_reference",
+          "resolves_to": "external_unknown",
+          "external_id": "email:jordan@pgconsult.io",
+          "external_label": "Jordan Reyes"
+        }
+      ]
+    },
+    {
+      "msg_id": "S003",
+      "source": "slack",
+      "sender_canonical_id": "person_jamie_wu",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I",
+          "category": "speaker_self_reference",
+          "resolves_to": "person_jamie_wu"
+        }
+      ]
+    },
+    {
+      "msg_id": "S004",
+      "source": "slack",
+      "sender_canonical_id": "person_sam_okafor",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I",
+          "category": "speaker_self_reference",
+          "resolves_to": "person_sam_okafor"
+        }
+      ]
+    },
+    {
+      "msg_id": "S005",
+      "source": "slack",
+      "sender_canonical_id": "person_maya_chen",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "me",
+          "category": "speaker_self_reference",
+          "resolves_to": "person_maya_chen"
+        }
+      ]
+    },
+    {
+      "msg_id": "S006",
+      "source": "slack",
+      "sender_canonical_id": "person_devon_brooks",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S007",
+      "source": "slack",
+      "sender_canonical_id": "person_sam_okafor",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S008",
+      "source": "slack",
+      "sender_canonical_id": "person_jamie_wu",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S009",
+      "source": "slack",
+      "sender_canonical_id": "person_priya_patel",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S010",
+      "source": "slack",
+      "sender_canonical_id": "person_alex_kim",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S011",
+      "source": "slack",
+      "sender_canonical_id": "person_devon_brooks",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Alex",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_alex_kim",
+          "note": "Direct reply to S010 (Alex Kim); no index-strategy context here"
+        }
+      ]
+    },
+    {
+      "msg_id": "S012",
+      "source": "slack",
+      "sender_canonical_id": "person_priya_patel",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S013",
+      "source": "slack",
+      "sender_canonical_id": "person_jamie_wu",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S014",
+      "source": "slack",
+      "sender_canonical_id": "person_devon_brooks",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S015",
+      "source": "slack",
+      "sender_canonical_id": "person_jamie_wu",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S016",
+      "source": "slack",
+      "sender_canonical_id": "person_priya_patel",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Alex",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_alex_rodriguez",
+          "note": "Index naming convention is Alex Rodriguez's workstream (ENG-462)"
+        }
+      ]
+    },
+    {
+      "msg_id": "S017",
+      "source": "slack",
+      "sender_canonical_id": "person_alex_rodriguez",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I",
+          "category": "speaker_self_reference",
+          "resolves_to": "person_alex_rodriguez"
+        }
+      ]
+    },
+    {
+      "msg_id": "S018",
+      "source": "slack",
+      "sender_canonical_id": "person_alex_kim",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S019",
+      "source": "slack",
+      "sender_canonical_id": "person_jamie_wu",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Alex",
+          "category": "first_name_ambiguous",
+          "resolves_to": null,
+          "candidates": ["person_alex_rodriguez", "person_alex_kim"]
+        },
+        {
+          "surface": "you",
+          "category": "pronoun_within_thread",
+          "resolves_to": null,
+          "candidates": ["person_alex_rodriguez", "person_alex_kim"],
+          "note": "Inherits ambiguity from 'Alex' in same message"
+        }
+      ]
+    },
+    {
+      "msg_id": "S020",
+      "source": "slack",
+      "sender_canonical_id": "person_alex_rodriguez",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S021",
+      "source": "slack",
+      "sender_canonical_id": "person_jamie_wu",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S022",
+      "source": "slack",
+      "sender_canonical_id": "person_devon_brooks",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Jamie",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_jamie_wu",
+          "note": "Only one Jamie in the project"
+        },
+        {
+          "surface": "you",
+          "surface_count": 2,
+          "category": "pronoun_within_thread",
+          "resolves_to": "person_sam_okafor",
+          "note": "DM to Sam; both 'you' tokens collapse to one row per Decision 11"
+        }
+      ]
+    },
+    {
+      "msg_id": "S023",
+      "source": "slack",
+      "sender_canonical_id": "person_sam_okafor",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I'll",
+          "category": "speaker_self_reference",
+          "resolves_to": "person_sam_okafor"
+        }
+      ]
+    },
+    {
+      "msg_id": "S024",
+      "source": "slack",
+      "sender_canonical_id": "person_devon_brooks",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "me",
+          "category": "speaker_self_reference",
+          "resolves_to": "person_devon_brooks"
+        },
+        {
+          "surface": "you",
+          "category": "pronoun_within_thread",
+          "resolves_to": "person_sam_okafor",
+          "note": "DM to Sam"
+        }
+      ]
+    },
+    {
+      "msg_id": "S025",
+      "source": "slack",
+      "sender_canonical_id": "person_priya_patel",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Sam",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_sam_okafor",
+          "note": "@here skipped per Mention Rule 2"
+        }
+      ]
+    },
+    {
+      "msg_id": "S026",
+      "source": "slack",
+      "sender_canonical_id": "person_alex_rodriguez",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I",
+          "surface_count": 2,
+          "category": "speaker_self_reference",
+          "resolves_to": "person_alex_rodriguez",
+          "note": "'I' and 'I'll' collapse per Decision 11"
+        }
+      ]
+    },
+    {
+      "msg_id": "S027",
+      "source": "slack",
+      "sender_canonical_id": "person_priya_patel",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I",
+          "surface_count": 2,
+          "category": "speaker_self_reference",
+          "resolves_to": "person_priya_patel",
+          "note": "Two 'I' tokens collapse per Decision 11"
+        }
+      ]
+    },
+    {
+      "msg_id": "S028",
+      "source": "slack",
+      "sender_canonical_id": "person_sam_okafor",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Priya",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_priya_patel"
+        }
+      ]
+    },
+    {
+      "msg_id": "S029",
+      "source": "slack",
+      "sender_canonical_id": "person_sam_okafor",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S030",
+      "source": "slack",
+      "sender_canonical_id": "person_priya_patel",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S031",
+      "source": "slack",
+      "sender_canonical_id": "person_alex_kim",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S032",
+      "source": "slack",
+      "sender_canonical_id": "person_jamie_wu",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S033",
+      "source": "slack",
+      "sender_canonical_id": "person_alex_kim",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S034",
+      "source": "slack",
+      "sender_canonical_id": "person_jamie_wu",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S035",
+      "source": "slack",
+      "sender_canonical_id": "person_priya_patel",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S036",
+      "source": "slack",
+      "sender_canonical_id": "person_devon_brooks",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S037",
+      "source": "slack",
+      "sender_canonical_id": "person_priya_patel",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I",
+          "surface_count": 2,
+          "category": "speaker_self_reference",
+          "resolves_to": "person_priya_patel",
+          "note": "'I' and 'I've' collapse per Decision 11"
+        }
+      ]
+    },
+    {
+      "msg_id": "S038",
+      "source": "slack",
+      "sender_canonical_id": "person_priya_patel",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S039",
+      "source": "slack",
+      "sender_canonical_id": "person_alex_rodriguez",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S040",
+      "source": "slack",
+      "sender_canonical_id": "person_sam_okafor",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S041",
+      "source": "slack",
+      "sender_canonical_id": "person_jamie_wu",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I'm",
+          "surface_count": 3,
+          "category": "speaker_self_reference",
+          "resolves_to": "person_jamie_wu",
+          "note": "'I'm', 'me', 'I' collapse per Decision 11"
+        },
+        {
+          "surface": "Sam",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_sam_okafor"
+        }
+      ]
+    },
+    {
+      "msg_id": "S042",
+      "source": "slack",
+      "sender_canonical_id": "person_sam_okafor",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I've",
+          "category": "speaker_self_reference",
+          "resolves_to": "person_sam_okafor"
+        }
+      ]
+    },
+    {
+      "msg_id": "S043",
+      "source": "slack",
+      "sender_canonical_id": "person_jamie_wu",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S044",
+      "source": "slack",
+      "sender_canonical_id": "person_alex_kim",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S045",
+      "source": "slack",
+      "sender_canonical_id": "person_maya_chen",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S046",
+      "source": "slack",
+      "sender_canonical_id": "person_alex_kim",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S047",
+      "source": "slack",
+      "sender_canonical_id": "person_devon_brooks",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I'll",
+          "surface_count": 2,
+          "category": "speaker_self_reference",
+          "resolves_to": "person_devon_brooks",
+          "note": "'I'll' and 'me' collapse per Decision 11"
+        }
+      ]
+    },
+    {
+      "msg_id": "S048",
+      "source": "slack",
+      "sender_canonical_id": "person_sam_okafor",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S049",
+      "source": "slack",
+      "sender_canonical_id": "person_alex_kim",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "me",
+          "surface_count": 2,
+          "category": "speaker_self_reference",
+          "resolves_to": "person_alex_kim",
+          "note": "Two 'me' tokens collapse per Decision 11; 'you' (addressing channel) skipped per Decision 15"
+        },
+        {
+          "surface": "Maya",
+          "category": "preferred_name_to_legal",
+          "resolves_to": "person_maya_chen"
+        }
+      ]
+    },
+    {
+      "msg_id": "S050",
+      "source": "slack",
+      "sender_canonical_id": "person_maya_chen",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Alex",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_alex_kim",
+          "note": "Direct reply to S049 (Alex Kim)"
+        }
+      ]
+    },
+    {
+      "msg_id": "S051",
+      "source": "slack",
+      "sender_canonical_id": "person_priya_patel",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S052",
+      "source": "slack",
+      "sender_canonical_id": "person_devon_brooks",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S053",
+      "source": "slack",
+      "sender_canonical_id": "person_sam_okafor",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S054",
+      "source": "slack",
+      "sender_canonical_id": "person_priya_patel",
+      "is_filler": true,
+      "mentions": []
+    },
+    {
+      "msg_id": "S055",
+      "source": "slack",
+      "sender_canonical_id": "person_sam_okafor",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Priya",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_priya_patel"
+        }
+      ]
+    },
+    {
+      "msg_id": "S056",
+      "source": "slack",
+      "sender_canonical_id": "person_priya_patel",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "you",
+          "category": "pronoun_within_thread",
+          "resolves_to": "person_sam_okafor",
+          "note": "Reply to S055 from Sam"
+        }
+      ]
+    },
+    {
+      "msg_id": "S057",
+      "source": "slack",
+      "sender_canonical_id": "person_sam_okafor",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "S058",
+      "source": "slack",
+      "sender_canonical_id": "person_alex_rodriguez",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Jordan",
+          "category": "external_name_reference",
+          "resolves_to": "external_unknown",
+          "external_id": "email:jordan@pgconsult.io",
+          "external_label": "Jordan Reyes"
+        }
+      ]
+    },
+    {
+      "msg_id": "S059",
+      "source": "slack",
+      "sender_canonical_id": "person_devon_brooks",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "E001",
+      "source": "email",
+      "sender_canonical_id": "person_alex_rodriguez",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I",
+          "category": "speaker_self_reference",
+          "resolves_to": "person_alex_rodriguez",
+          "note": "Signature 'Alex' skipped per Decision 13; 'our' skipped per Mention Rule 2"
+        },
+        {
+          "surface": "Jordan",
+          "category": "external_name_reference",
+          "resolves_to": "external_unknown",
+          "external_id": "email:jordan@pgconsult.io",
+          "external_label": "Jordan Reyes"
+        },
+        {
+          "surface": "you",
+          "category": "pronoun_within_thread",
+          "resolves_to": "external_unknown",
+          "external_id": "email:jordan@pgconsult.io",
+          "external_label": "Jordan Reyes",
+          "note": "'you'/'your' addressing Jordan collapse per Decision 11; 'your' addressing both recipients skipped per Decision 15"
+        },
+        {
+          "surface": "Priya",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_priya_patel"
+        }
+      ]
+    },
+    {
+      "msg_id": "E002",
+      "source": "email",
+      "sender_canonical_id": "external_unknown",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I'll",
+          "category": "speaker_self_reference",
+          "resolves_to": "external_unknown",
+          "external_id": "email:jordan@pgconsult.io",
+          "external_label": "Jordan Reyes",
+          "note": "Sender is external; self-ref resolves to external_unknown per Decision 12. Signature skipped per Decision 13."
+        }
+      ]
+    },
+    {
+      "msg_id": "E003",
+      "source": "email",
+      "sender_canonical_id": "external_unknown",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Alex",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_alex_rodriguez",
+          "note": "Alex R is on this thread; Alex K is not. Signature skipped per Decision 13."
+        },
+        {
+          "surface": "you",
+          "category": "pronoun_within_thread",
+          "resolves_to": "person_alex_rodriguez",
+          "note": "Singular 'you' addressing Alex directly; 'your' addressing both recipients skipped per Decision 15"
+        }
+      ]
+    },
+    {
+      "msg_id": "E004",
+      "source": "email",
+      "sender_canonical_id": "person_alex_rodriguez",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "my",
+          "category": "speaker_self_reference",
+          "resolves_to": "person_alex_rodriguez",
+          "note": "Signature skipped per Decision 13"
+        }
+      ]
+    },
+    {
+      "msg_id": "E005",
+      "source": "email",
+      "sender_canonical_id": "external_unknown",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "E006",
+      "source": "email",
+      "sender_canonical_id": "person_alex_rodriguez",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I'll",
+          "category": "speaker_self_reference",
+          "resolves_to": "person_alex_rodriguez",
+          "note": "'our' skipped per Mention Rule 2; signature skipped per Decision 13"
+        }
+      ]
+    },
+    {
+      "msg_id": "E007",
+      "source": "email",
+      "sender_canonical_id": "person_alex_rodriguez",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "me",
+          "category": "speaker_self_reference",
+          "resolves_to": "person_alex_rodriguez",
+          "note": "Signature skipped per Decision 13"
+        }
+      ]
+    },
+    {
+      "msg_id": "E008",
+      "source": "email",
+      "sender_canonical_id": "external_unknown",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "E009",
+      "source": "email",
+      "sender_canonical_id": "person_priya_patel",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Jordan",
+          "category": "external_name_reference",
+          "resolves_to": "external_unknown",
+          "external_id": "email:jordan@pgconsult.io",
+          "external_label": "Jordan Reyes"
+        },
+        {
+          "surface": "Alex",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_alex_rodriguez",
+          "note": "Thread is alex-r/jordan/priya; Alex K not on thread"
+        },
+        {
+          "surface": "I'll",
+          "category": "speaker_self_reference",
+          "resolves_to": "person_priya_patel",
+          "note": "Signature skipped per Decision 13"
+        }
+      ]
+    },
+    {
+      "msg_id": "L001",
+      "source": "linear",
+      "sender_canonical_id": "person_devon_brooks",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Priya",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_priya_patel"
+        },
+        {
+          "surface": "Jordan",
+          "category": "external_name_reference",
+          "resolves_to": "external_unknown",
+          "external_id": "email:jordan@pgconsult.io",
+          "external_label": "Jordan Reyes"
+        },
+        {
+          "surface": "Alex",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_alex_rodriguez",
+          "note": "Index strategy workstream is Alex Rodriguez's; Alex Kim not involved"
+        },
+        {
+          "surface": "Jamie",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_jamie_wu"
+        }
+      ]
+    },
+    {
+      "msg_id": "L002",
+      "source": "linear",
+      "sender_canonical_id": "person_maya_chen",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "I'll",
+          "category": "speaker_self_reference",
+          "resolves_to": "person_maya_chen"
+        }
+      ]
+    },
+    {
+      "msg_id": "L003",
+      "source": "linear",
+      "sender_canonical_id": "person_devon_brooks",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "L004",
+      "source": "linear",
+      "sender_canonical_id": "person_priya_patel",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Sam",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_sam_okafor"
+        }
+      ]
+    },
+    {
+      "msg_id": "L005",
+      "source": "linear",
+      "sender_canonical_id": "person_sam_okafor",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "L006",
+      "source": "linear",
+      "sender_canonical_id": "person_alex_rodriguez",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Jordan",
+          "category": "external_name_reference",
+          "resolves_to": "external_unknown",
+          "external_id": "email:jordan@pgconsult.io",
+          "external_label": "Jordan Reyes"
+        }
+      ]
+    },
+    {
+      "msg_id": "L007",
+      "source": "linear",
+      "sender_canonical_id": "person_jamie_wu",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "L008",
+      "source": "linear",
+      "sender_canonical_id": "person_jamie_wu",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Sam",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_sam_okafor"
+        }
+      ]
+    },
+    {
+      "msg_id": "L009",
+      "source": "linear",
+      "sender_canonical_id": "person_sam_okafor",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Maya",
+          "category": "preferred_name_to_legal",
+          "resolves_to": "person_maya_chen"
+        },
+        {
+          "surface": "you",
+          "category": "pronoun_within_thread",
+          "resolves_to": "person_maya_chen",
+          "note": "Directly addresses Maya in the question"
+        }
+      ]
+    },
+    {
+      "msg_id": "L010",
+      "source": "linear",
+      "sender_canonical_id": "person_maya_chen",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "me",
+          "category": "speaker_self_reference",
+          "resolves_to": "person_maya_chen"
+        }
+      ]
+    },
+    {
+      "msg_id": "L011",
+      "source": "linear",
+      "sender_canonical_id": "person_sam_okafor",
+      "is_filler": false,
+      "mentions": []
+    },
+    {
+      "msg_id": "L012",
+      "source": "linear",
+      "sender_canonical_id": "person_sam_okafor",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Priya",
+          "category": "first_name_disambiguated_by_context",
+          "resolves_to": "person_priya_patel"
+        }
+      ]
+    },
+    {
+      "msg_id": "L013",
+      "source": "linear",
+      "sender_canonical_id": "person_alex_rodriguez",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Jordan",
+          "category": "external_name_reference",
+          "resolves_to": "external_unknown",
+          "external_id": "email:jordan@pgconsult.io",
+          "external_label": "Jordan Reyes"
+        }
+      ]
+    },
+    {
+      "msg_id": "L014",
+      "source": "linear",
+      "sender_canonical_id": "person_alex_rodriguez",
+      "is_filler": false,
+      "mentions": [
+        {
+          "surface": "Jordan",
+          "category": "external_name_reference",
+          "resolves_to": "external_unknown",
+          "external_id": "email:jordan@pgconsult.io",
+          "external_label": "Jordan Reyes"
+        }
+      ]
+    }
+  ]
+}

@@ -53,6 +53,18 @@
       "source_message_ref": {"source": "slack", "msg_id": "S027"},
       "confidence": "medium",
       "confidence_note": "Implicit assignment via S027 ('actually I got it'); specific time (9am Thursday) fixed in S029/S030. Due cascades to 2026-05-15 once c_003 slips — see m_011."
+    },
+    {
+      "commitment_id": "c_006",
+      "owner": "person_alex_rodriguez",
+      "owed_to": ["external:email:jordan@pgconsult.io"],
+      "external_labels": {"external:email:jordan@pgconsult.io": "Jordan Reyes"},
+      "task": "attend index strategy call with Jordan",
+      "due": "2026-05-13",
+      "status": "open",
+      "source_message_ref": {"source": "email", "msg_id": "E004"},
+      "confidence": "medium",
+      "confidence_note": "Alex proposes 'Wed 2pm my time?' (E004); Jordan confirms 'works.' (E005). Proposal-as-commitment is a judgment call — the specific task (call) and time (Wed 2pm) are concrete with no escape clause. Short-lived: completed same day per E006 ('Per our call...')."
     }
   ],
   "modification_events": [
@@ -161,6 +173,24 @@
       "source_message_ref": {"source": "linear", "msg_id": "L004"},
       "confidence": "high",
       "confidence_note": "Same Linear comment as m_002 — L004 references both c_001 and c_005 ('Schema diff lands today, pairing with Sam in the AM')."
+    },
+    {
+      "event_id": "m_013",
+      "commitment_id": "c_006",
+      "type": "status_update",
+      "new_status": "confirmed",
+      "source_message_ref": {"source": "email", "msg_id": "E005"},
+      "confidence": "high",
+      "confidence_note": "Jordan's 'works.' (E005) confirms the Wed 2pm slot. Not a new commitment — Jordan is accepting Alex's proposal."
+    },
+    {
+      "event_id": "m_014",
+      "commitment_id": "c_006",
+      "type": "status_update",
+      "new_status": "completed",
+      "source_message_ref": {"source": "email", "msg_id": "E006"},
+      "confidence": "high",
+      "confidence_note": "E006 opens 'Per our call' — first evidence the Wednesday call occurred. c_006 is complete."
     }
   ],
   "non_commitments": [

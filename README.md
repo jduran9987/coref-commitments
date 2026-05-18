@@ -1,157 +1,337 @@
 # coref-commitments
 
-A project exploring LLM-driven coreference resolution across Slack threads, email chains, and Linear comments. The system pulls action items from distributed team communication and resolves every person-mention — first names, pronouns, "I", "me", "him" — to canonical identities, producing per-person digests of who owes what to whom.
+A demo pipeline for coreference resolution and commitment extraction across Slack, Email, and Linear. Given a week of workplace messages, it identifies who said what to whom, resolves ambiguous references to the right person, and produces a per-person action-item digest.
 
-Managed with [uv](https://docs.astral.sh/uv/).
+The interesting problem is coreference, not commitment extraction. "Alex" can be two people. "I'll" commits in one message and doesn't in the next. A promise made on Slack that gets restated on Linear is one commitment, not two. Pattern matching doesn't solve any of this — context does. The project is currently in the ground-truth annotation phase; pipeline modules follow.
 
-## The coreference problem
+---
 
-Coreference resolution is the task of figuring out when different expressions in text refer to the same entity. In *"Alex picked it up — he said he'd be done by Friday,"* a system that wants to understand the sentence needs to know "he" refers to "Alex" and "it" refers to whatever was just discussed. Humans resolve this without thinking. Machines have struggled with it for decades.
+## Why this project
 
-Classical NLP approaches used hand-coded heuristics (he/she prefers the nearest gender-matching subject) and later statistical models trained on annotated corpora like OntoNotes. These work moderately well on edited news text. They fail on workplace conversation, which is harder in nearly every way that matters: messages are short and context-poor, references are implicit (*"got it,"* *"I'll take this"*), coreference chains span tools (a Slack thread continues in email, then resolves in a Linear comment), first names collide ("Alex" might be one of two people), and the same person has different identifiers in every system.
+Real workplace data is full of references that require context to resolve:
 
-LLMs help here for three reasons traditional models can't match: broad world knowledge, in-context reasoning over heterogeneous conversation history, and the ability to weigh soft signals (thread participants, team membership, recent mentions, pronouns) without explicit rules. They're not magic — genuinely ambiguous cases still fail — but they raise the floor enough to make tools like this one viable.
+- **Name collisions.** Two people named Alex are active in the same thread. Who does Jamie mean when they write "Alex, can you share that doc?" At the moment of the message, it's genuinely ambiguous. Only the reply disambiguates it.
+- **Implicit ownership.** Priya writes "actually I got it" — no "I will", no modal, no explicit deliverable. A regex misses this. It's a commitment.
+- **Adversarial "I'll".** Priya also writes "I'll believe it when I see it." This is idiomatic skepticism. A naive extractor that pattern-matches on "I'll" gets it wrong.
+- **Cross-tool restatements.** Jamie commits to a staging dry-run on Slack on Monday. On Tuesday she announces on Linear that Sam is handling it instead. On Wednesday Sam confirms via DM. These aren't three commitments — they're one commitment with two modification events.
 
-LLMs do *not* solve identity reconciliation across systems. Knowing that Slack user `U07MAYA` and Linear user `mchen` are the same person is the job of a deterministic consolidation pipeline reading upstream APIs (HRIS, IdP, per-tool user directories). The LLM picks up where that store ends: resolving "him," "Maya," "their manager," and "the dry-run" against canonical entities at the message level.
+A dedicated eval can measure whether the pipeline handles these cases. A dedicated eval requires dedicated ground truth. Ground truth requires decisions locked in writing before any annotation happens. That ordering is what this project takes seriously.
 
-## This project
+---
 
-We're building an **action-item tracker** that pulls commitments from Slack, email, and Linear, resolves every person-mention to a canonical identity, and produces a daily per-person digest of what each engineer owes and is owed. The coreference layer is the load-bearing piece: a message like *"I'll have it ready by EOD Wed"* contains no resolvable identifier on its own. The system has to know who "I" is (the Slack author), who's implicitly owed (the channel), and that this is a real commitment, not a hedge (*"I'll probably get to it if nothing else comes up"*).
+## Approach: ground truth first
 
-### Scenario
+Decisions were written before annotation began. Annotations were authored before any pipeline code was written. This ordering is deliberate: if ground truth is shaped by what the pipeline happens to emit, the eval measures nothing except the pipeline's self-consistency.
 
-The project simulates 72 hours of activity at Acme, a fictional company, where the Platform engineering team is two weeks into a Postgres 14 → 16 migration. There's a stakeholder review Friday afternoon. Three workstreams are running in parallel: a schema diff, an index strategy review with an external consultant, and a staging dry-run.
+The ground-truth workflow:
 
-The cast:
+1. Lock all modeling decisions in `DECISIONS.md` with full rationale.
+2. Author `mentions_truth.json` — 82 message rows, one per message, with all mention-level coreference resolution recorded.
+3. Author `commitments_truth.json` — 6 commitments, 14 modification events, 7 adversarial non-commitment cases.
+4. Author `MESSAGES.md` — a chronological per-message reasoning trace cross-referencing both truth files.
+5. Pipeline code follows.
 
-- **Priya Patel** — Platform engineer, owns the schema diff
-- **Alex Rodriguez** — Platform engineer, owns the index strategy review
-- **Alex Kim** — *Frontend* engineer, occasional drive-by participant; shares a first name with Alex Rodriguez
-- **Jamie Wu** — Platform engineer, initially owns the staging dry-run
-- **Sam Okafor** — Platform engineer, takes over the dry-run mid-week
-- **Maya Chen** — Platform engineering manager; legal name Mei-Ling Chen, Slack shows "Maya", email and Linear use the legal name
-- **Devon Brooks** — Product manager tracking the project
-- **Jordan Reyes** — External Postgres consultant, appears only in email; no internal canonical identity
+---
 
-#### Monday — kickoff
+## Data model
 
-Devon kicks off the week with a comment on the umbrella Linear ticket (ENG-447) laying out the plan: schema diff by Wednesday EOD, index review by Friday, dry-run by Thursday. Maya endorses. In Slack `#db-migration`, Priya self-assigns to the schema diff, Alex Rodriguez takes the index strategy review, and Jamie picks up the staging dry-run; Sam chimes in with a vague offer to help wherever needed but doesn't commit to a specific task.
+**Canonical entities** (v1 scope): people and Linear tickets only. No teams, channels, or departments as canonical entities. Promoting channels to canonical entities would require a new resolver path for entities with no aliasing problem — not worth it at this stage.
 
-Later in the afternoon, Alex Kim — an engineer from the Frontend team who shares a first name with Alex Rodriguez — drops into `#db-migration` offering a frontend perspective if needed. By email, Alex Rodriguez loops in Jordan Reyes, the external Postgres consultant; Jordan replies committing to send review notes by Thursday.
+**Reserved namespaces** in `owed_to` fields:
+- `channel:db-migration` — broadcast commitment to a channel; not a canonical entity
+- `external:email:jordan@pgconsult.io` — commitment owed to an external; not in the identity store
 
-**Active entities:** Devon, Maya, Priya, Alex Rodriguez, Jamie, Sam, Alex Kim, Jordan
+**External resolution**: People absent from the canonical identity store resolve as `external_unknown`. Jordan Reyes (`jordan@pgconsult.io`) is the deliberate external in v1. Commitment rows where an external is the owner carry `owner: "external_unknown"`, `external_id`, and `external_label`. The identity store must not be augmented with magic aliases or observational shortcuts.
 
-**Commitments created:**
-- Priya → schema diff by Wed EOD *(Slack)*
-- Alex Rodriguez → index strategy review by Fri *(Slack + Linear ENG-462)*
-- Jamie → staging dry-run by Thu *(Slack + Linear ENG-451)*
-- Jordan → review notes by Thu *(Email)*
+---
 
-**Non-commitments:**
-- Sam: *"I can help wherever needed"* — soft offer, no specific task
-- Alex Kim: *"happy to help if you need a frontend perspective"* — general offer
+## The mock dataset
 
-**Coreference challenges:**
-- Both Alexes are now active in `#db-migration` — future references to "Alex" will need disambiguation
-- Jordan has no canonical entity — must be handled as an external sender
+A 72-hour window: Monday May 11 through Thursday May 14, 2026. One migration project (`ENG-447: Postgres 14 → 16 migration`), three sub-workstreams, seven people, one external consultant.
 
-#### Tuesday — the messy middle
+| Source | Messages |
+|--------|----------|
+| Slack (`#db-migration` + 2 DM threads) | 59 |
+| Email (1 thread, 9 messages) | 9 |
+| Linear (3 tickets, 14 comments) | 14 |
+| **Total** | **82** |
 
-In a `#db-migration` thread, Priya opens with *"Quick q for Alex"* about partial-index naming. Alex Rodriguez answers (he owns the index work); Alex Kim chimes in with a tangential frontend remark. Jamie follows up with *"Alex, can you share that doc?"* — genuinely ambiguous now that both Alexes are active in the thread.
+**People:**
+- Priya Patel — schema diff workstream
+- Alex Rodriguez — index strategy workstream
+- Alex Kim — Frontend Engineering (the other Alex; name collision is deliberate)
+- Jamie Wu — staging dry-run (transfers ownership mid-week)
+- Sam Okafor — picks up dry-run after Jamie
+- Maya Chen (preferred name) / Mei-Ling Chen (legal name) — Engineering Manager; display name doesn't match identity store
+- Devon Brooks — Senior PM; owns ENG-447
 
-Jamie gets pulled into an unrelated incident review and posts on ENG-451: *"Sam is handling this now."* Sam doesn't acknowledge on the ticket. Devon DMs Sam to confirm the transfer; Sam agrees: *"yeah I'll pick it up, aiming for Thursday."* Back in `#db-migration`, Priya asks who can pair with Sam on the dry-run Thursday morning. Alex Rodriguez hedges — *"I think I'll probably get to it if nothing else comes up"* — and Priya then takes it herself: *"actually I got it."* She now owns both the schema diff and the pairing task.
+**External:** Jordan Reyes (`jordan@pgconsult.io`) — external Postgres consultant; not in the canonical store.
 
-By email, Jordan raises a concern with the composite index proposal — the selectivity on tenant_id is too low for the hot query — and suggests a call. Alex Rodriguez and Jordan schedule for Wednesday 2pm.
+**Tickets:** ENG-447 (umbrella), ENG-451 (staging dry-run), ENG-462 (index strategy).
 
-**Active entities:** Priya, Alex Rodriguez, Alex Kim, Jamie, Sam, Devon, Jordan
+The dataset includes filler messages (off-topic chatter tagged `_note: "filler"` in the source), adversarial cases planted to test false-positive extraction, and several cross-tool restatements of the same commitment.
 
-**Commitments created:**
-- Sam → staging dry-run by Thu *(Slack DM with Devon)* — transferred from Jamie
-- Priya → pair with Sam on dry-run, Thu 9am *(Slack, implicit self-assignment)*
+---
 
-**Commitment modifications:**
-- ENG-451: ownership transfer Jamie → Sam *(Linear comment + Slack DM confirmation across tools)*
+## Ground truth files
 
-**Non-commitments:**
-- Alex Rodriguez: *"I think I'll probably get to it if nothing else comes up"* — hedged
+### `mentions_truth.json`
 
-**Coreference challenges:**
-- *"Quick q for Alex"* (Priya) → Alex Rodriguez, resolvable by thread context (he owns the index work)
-- *"Alex, can you share that doc?"* (Jamie) → genuinely **ambiguous** — both Alexes are active in the thread
-- Sam's *"I'll pick it up"* (Slack DM) must dedupe against Jamie's *"Sam is handling this now"* (Linear) — same commitment, two tools
+One row per message (82 total). Each row records the message ID, source, sender's canonical ID, a filler flag, and a list of mention objects. Each mention records the surface form, category, and resolution target.
 
-#### Wednesday — slippage and a declined transfer-back
+Abbreviated example:
 
-Priya DMs Devon: *"heads up, schema diff is going to slip to Thursday — the partial index thing turned out to be a rabbit hole."* She announces it again in `#db-migration` shortly after; both messages refer to the same existing commitment, just shared with different audiences.
+```json
+{
+  "msg_id": "S019",
+  "source": "slack",
+  "sender_canonical_id": "person_jamie_wu",
+  "is_filler": false,
+  "mentions": [
+    {
+      "surface": "Alex",
+      "category": "first_name_ambiguous",
+      "resolves_to": null,
+      "candidates": ["person_alex_rodriguez", "person_alex_kim"]
+    },
+    {
+      "surface": "you",
+      "category": "pronoun_within_thread",
+      "resolves_to": null,
+      "candidates": ["person_alex_rodriguez", "person_alex_kim"],
+      "note": "Inherits ambiguity from 'Alex' in same message"
+    }
+  ]
+}
+```
 
-On ENG-451, Sam reports a replication-lag snag and tags *"Maya"* asking whether pushing to Friday morning is acceptable given the review. Maya grants permission — *"Friday AM is fine if it has to slip, but loop me in earlier next time"* — but doesn't take on a task of her own. Sam updates the ETA on the ticket.
+This is S019 — the marquee ambiguity case. Jamie asks "Alex, can you share that doc?" when both Alex Rodriguez and Alex Kim are active in the thread. The ground truth records it as genuinely ambiguous at annotation time; the resolution only becomes clear when Alex Rodriguez responds in S020.
 
-Jamie, freed up from the incident review, offers in Slack to take the dry-run back: *"if Sam wants me to take the dry-run back I can."* Sam declines: *"appreciate it but I've got it, just slipping a day."* The commitment stays with Sam.
+Contrast with a resolved case:
 
-After the index call, Alex Rodriguez emails Jordan and Priya summarizing the new approach — dropping the composite index in favor of two single-column indexes plus a partial — commits to updating the proposal doc that night, and follows up later with the updated link. He mirrors the same update on ENG-462.
+```json
+{
+  "msg_id": "S016",
+  "source": "slack",
+  "sender_canonical_id": "person_priya_patel",
+  "is_filler": false,
+  "mentions": [
+    {
+      "surface": "Alex",
+      "category": "first_name_disambiguated_by_context",
+      "resolves_to": "person_alex_rodriguez",
+      "note": "Index naming convention is Alex Rodriguez's workstream (ENG-462)"
+    }
+  ]
+}
+```
 
-**Active entities:** Priya, Devon, Sam, Maya, Jamie, Alex Rodriguez, Jordan
+Same surface form, different context. Priya asks about index naming convention — that's Alex Rodriguez's workstream. The pipeline needs to know that to get this right.
 
-**Commitments created:**
-- Alex Rodriguez → update proposal doc tonight *(Email)* — completed same evening
+### `commitments_truth.json`
 
-**Commitment modifications:**
-- Priya's schema diff: due date Wed → Thu *(Slack DM, then channel announcement)*
-- Sam's dry-run: due date Thu → Fri AM *(Linear comment, with permission from Maya)*
-- Sam's dry-run: transfer back to Jamie offered and **declined** — commitment stays with Sam
+Six commitments (`c_001`–`c_006`), 14 modification events (`m_001`–`m_014`), and 7 adversarial non-commitment cases.
 
-**Non-commitments:**
-- Maya: *"Friday AM is fine if it has to slip"* — permission, not a commitment
-- Jamie: *"if Sam wants me to take the dry-run back I can"* — offer, declined
+Abbreviated commitment example:
 
-**Coreference challenges:**
-- Priya's DM update + channel announcement should match the *same* existing commitment, not create a duplicate
-- Sam tags *"Maya"* on Linear — must resolve to Mei-Ling Chen (Linear stores the legal name)
+```json
+{
+  "commitment_id": "c_005",
+  "owner": "person_priya_patel",
+  "owed_to": ["person_sam_okafor", "channel:db-migration"],
+  "task": "pair with Sam on staging dry-run",
+  "due": "2026-05-14",
+  "status": "open",
+  "source_message_ref": {"source": "slack", "msg_id": "S027"},
+  "confidence": "medium",
+  "confidence_note": "Implicit assignment via S027 ('actually I got it'); specific time (9am Thursday) fixed in S029/S030."
+}
+```
 
-#### Thursday — convergence
+Abbreviated modification event example:
 
-Devon posts a status check on ENG-447 ahead of Friday's stakeholder review: *"where are we?"* Three replies follow. Priya: schema diff lands today, pairing with Sam in the AM. Sam: dry-run pushed to Fri AM, but on track for the review. Alex Rodriguez: index strategy locked, doc updated, Jordan signed off. Each reply updates an existing commitment rather than introducing a new one.
+```json
+{
+  "event_id": "m_007",
+  "commitment_id": "c_003",
+  "type": "ownership_transfer",
+  "new_owner": "person_sam_okafor",
+  "source_message_ref": {"source": "linear", "msg_id": "L008"},
+  "resolution_message_ref": {"source": "slack", "msg_id": "S023"},
+  "confidence": "high",
+  "confidence_note": "Transfer announced by Jamie on Linear (L008); Sam accepts via DM to Devon (S023)."
+}
+```
 
-By email, Jordan signs off on the updated index doc; Priya thanks Jordan and notes she'll fold the changes into the schema diff today. Alex Kim returns to `#db-migration` with a conditional offer to QA the frontend after the migration — *"ping me, Maya knows how to reach me"* — and Maya briefly acknowledges. In the afternoon, Sam confirms the 9am Friday pairing with Priya in both Slack and on ENG-451, referencing the same existing arrangement.
+The `non_commitments` section records adversarial cases — messages a naive extractor would plausibly flag as commitments but shouldn't. Each row carries a `reason` field explaining the disqualifier. This gives the future eval a way to measure false-positive rate, not just recall.
 
-The 72-hour window closes.
+### `MESSAGES.md`
 
-**Active entities:** Devon, Priya, Sam, Alex Rodriguez, Jordan, Alex Kim, Maya
+A chronological cross-reference of all 82 messages and how each contributes to the two truth files. Covers: which messages create commitments, which are modification events, which are restatements, which are filler, and what the coreference decisions are for each mention. Used as the annotation reasoning trace during authoring.
 
-**Commitments created:** none
+---
 
-**Commitment modifications:**
-- Status updates on ENG-447 *(Linear)* roll up to existing commitments — schema diff, dry-run, index strategy — not new commitments
-- Sam's *"Confirmed pairing with Priya at 9am Friday"* *(Linear)* and the matching Slack exchange reference the same existing commitment
+## Mention categories
 
-**Non-commitments:**
-- Alex Kim: *"if you need someone to QA the FE after the migration, ping me — Maya knows how to reach me"* — conditional
+Seven categories cover all person-mention surface forms in v1:
 
-**Coreference challenges:**
-- Three status replies on ENG-447 must each match the right existing commitment by owner + task similarity
-- *"Maya knows how to reach me"* — name reference (no pronoun), resolves via `slack_display_name`
+**`speaker_self_reference`** — First-person surface forms ("I", "me", "my", "I'll", "I'm", "I've") resolving to the message sender's canonical ID. The most common category. Multiple first-person tokens in one message collapse to one row.
 
-The expected output is a Slack DM digest delivered to each engineer Friday morning, listing their open commitments and what others owe them, with each row linked back to the source message.
+> S001: Priya writes "I'm taking the schema diff this week. I'll have it ready by EOD Wed." → `person_priya_patel`. Two surface forms; `surface_count: 2`.
 
-## Repository layout
+**`external_name_reference`** — Body-text reference to a person not in the canonical identity store, identified by name. Resolves to `external_unknown`; the mention row carries `external_id` and `external_label`.
+
+> S002: Alex writes "pulling Jordan in over email today." → `external_unknown`, `external_id: "email:jordan@pgconsult.io"`, `external_label: "Jordan Reyes"`.
+
+**`first_name_ambiguous`** — A first name that cannot be resolved at annotation time because multiple candidates are plausible in context.
+
+> S019: Jamie writes "Alex, can you share that doc?" with both Alex Rodriguez and Alex Kim active in the thread. → `resolves_to: null`, `candidates: ["person_alex_rodriguez", "person_alex_kim"]`.
+
+**`first_name_disambiguated_by_context`** — A first name resolvable by thread membership, topic, or workstream context.
+
+> S016: Priya asks about the index naming convention — Alex Rodriguez's workstream. "Alex" → `person_alex_rodriguez`.
+
+**`preferred_name_to_legal`** — A display-name reference to someone whose canonical record uses a different legal name.
+
+> S049: Alex Kim writes "Maya knows how to reach me." Maya → `person_maya_chen` (legal name: Mei-Ling Chen).
+
+**`addressed_to`** — Direct address forms naming the recipient rather than referring to a third party.
+
+> Not annotated in v1 for `@here` and similar broadcast addresses — these are group references and fall under Mention Rule 2.
+
+**`pronoun_within_thread`** — Pronouns ("him", "her", "they", "you") whose referent is established by thread or DM context.
+
+> S024: Devon's DM to Sam — "ping me if you need anything." "you" → `person_sam_okafor`.
+
+---
+
+## Commitment model
+
+**What counts:** A stated intention to do a specific task, by a specific person, with no escape clause. Modals ("I can", "I'll") count when task and timing are concrete. Implicit ownership claims without a modal surface form also count (S027: "actually I got it").
+
+**What doesn't count:**
+- Conditional offers: "happy to help if you need a frontend perspective" — conditional on being needed (S010)
+- Explicit escape clauses: "I think I'll probably get to it if nothing else comes up" — both "probably" and the conditional disqualify it (S026)
+- Permission-granting: "Friday AM is fine if it has to slip" — Maya approving Sam's request, not committing to anything herself (L010)
+- Sub-tasks of an existing commitment: Alex updating the proposal doc after his call with Jordan is a status update on c_002, not a new commitment
+- Meeting attendance: the Friday 2pm stakeholder review is an event category, not a deliverable — out of scope for v1
+
+**Cross-tool restatements** collapse to one row. The originating message wins as `source_message_ref`. When the same commitment is restated on a different platform, that restatement becomes a `status_update` modification event, not a new commitment row.
+
+**Modification events** record changes to existing commitments: `due_date_update`, `ownership_transfer`, `status_update`, and `transfer_declined`. A declined transfer offer gets its own event type so the eval can verify the pipeline recognized the exchange without changing the commitment's state.
+
+**The `non_commitments` section** records seven adversarial cases — selected on the criterion "would a naive pattern-matcher get this wrong?" The section makes the false-positive test self-contained.
+
+---
+
+## Worked examples
+
+### 1. The marquee ambiguity: S019
+
+It's Tuesday morning. Priya has asked Alex Rodriguez about index naming in S016 (Alex responded in S017). Alex Kim chimed in from the frontend team in S018. Now Jamie writes in the thread:
+
+> "Alex, can you share that doc?"
+
+Both Alexes are in this thread. The topic — a wiki doc about index naming — belongs to Alex Rodriguez's workstream. But Jamie doesn't say that. At annotation time, this is recorded as `first_name_ambiguous` with two candidates. The resolution only materializes in S020, when Alex Rodriguez answers with the link.
+
+The pipeline needs to handle this as a genuinely ambiguous case at the point of mention, while being able to retrospectively resolve it from the reply.
+
+### 2. The implicit commitment: S027
+
+Tuesday afternoon. Priya has asked the channel "@here who can pair with Sam on the dry-run Thursday morning?" (S025). Alex Rodriguez hedges: "I think I'll probably get to it if nothing else comes up" (S026 — not a commitment; escape clause disqualifies it). Two minutes later, Priya writes:
+
+> "actually I got it, makes sense since I wrote the schema"
+
+No "I will". No modal. No explicit deliverable stated. But Priya is answering her own question — taking ownership of something she just asked the channel for. This is c_005. A regex misses it. Catching it is part of what the coreference layer exists to do.
+
+### 3. The adversarial "I'll": S009
+
+The same morning as the staging dry-run discussion, Priya writes in the channel:
+
+> "I'll believe it when I see it"
+
+(About the coffee machine being fixed.) This is idiomatic skepticism, not a promise. The pipeline must not pattern-match on "I'll" and emit a commitment. This message is in the `non_commitments` section with `confidence: high` and is also marked `is_filler: true` — the filler designation dominates, and the `mentions_truth.json` row has `mentions: []` even though the "I'll" surface form is there.
+
+The non-commitment row still tests the commitment extractor independently of the mention-layer decision.
+
+### 4. When does a possibility become a commitment: L009 → L011
+
+Wednesday. Sam is running into replication lag issues on the staging dry-run. He posts on Linear (ENG-451):
+
+> "Hitting a snag with the replication lag, might need to push to Friday morning. Maya, can you weigh in on whether that's acceptable given the review?"
+
+This is a request for permission, not a commitment modification. Maya responds: "Friday AM is fine if it has to slip, but loop me in earlier next time." Still not a modification event — this is Maya granting permission.
+
+Then Sam writes: "ack, will do. Updating ETA to Fri AM." (L011)
+
+That's the moment the slip becomes firm. The modification event `m_008` is anchored to L011, not L009. The confidence note explains why: L009 raised a possibility; L011 is where Sam formally updated the ETA.
+
+The pipeline needs to distinguish these three message types: possibility-raised, permission-granted, and commitment-updated. They arrive in sequence within the same ticket thread.
+
+---
+
+## Decisions and mention rules
+
+Fifteen decisions (one retired) and three mention rules govern the annotations. All were locked before annotation began in `DECISIONS.md`. A few representative examples:
+
+**Decision 1 (commitment definition):** The full definition with sub-rules covers modals, escape clauses, sub-tasks, and cross-tool restatements. Two specific calls are locked inside it: S027 counts as a commitment (implicit ownership, no surface modal); E006 ("I'll update the proposal doc tonight") does not mint a new commitment — it's a status update on the existing index strategy commitment.
+
+**Decision 7 (cross-tool restatement):** One row in `commitments_truth.json`, originating message wins. This is the hardest discrimination task for the pipeline — recognizing a restatement as a reference to an existing commitment rather than a new one. Making "one row" the explicit ground-truth rule focuses the eval on exactly this.
+
+**Decision 11 (self-reference collapse):** Multiple first-person surface forms in one message collapse to one `speaker_self_reference` row. The pipeline answers "who does 'I' refer to" once per message; counting every token would inflate mention totals and double-count resolution agreement.
+
+**Decision 14 (filler dominates):** Filler messages get `mentions: []` even when they contain a real disambiguation case (e.g. S045: "wrong channel Alex 😄"). The filler designation is applied uniformly so the eval harness has a clean rule without case-by-case exceptions.
+
+**Mention Rule 1 (no implicit self-references):** A `speaker_self_reference` requires an explicit surface form. "happy to help" with no "I" in the text is not annotated. This keeps the annotation scope to surface-form resolution and out of intent inference.
+
+**Mention Rule 2 (group references out of scope):** "We", "the team", "all" — no canonical entity to resolve to in v1. If group coreference becomes a v2 requirement, it can be added as a new category.
+
+---
+
+## Status and roadmap
+
+| Module | Status |
+|--------|--------|
+| Use case definition | Done |
+| Project setup | Done |
+| Mock upstream sources | Done |
+| Ground-truth annotations | **Active** |
+| Source adapters / normalization | Upcoming |
+| Identity resolver | Upcoming |
+| Coreference resolver | Upcoming |
+| Commitment extractor | Upcoming |
+| Eval harness | Upcoming |
+| Digest renderer | Upcoming |
+
+**Current state:** Both ground-truth files are authored and locked. `MESSAGES.md` is in the repo. README update (this file) is the remaining task in the ground-truth module before moving to Module 5.
+
+**Next:** Source adapters / normalization — ingesting each source format into a normalized message stream, stripping authoring metadata (the `_note` fields in Slack messages), and preparing input for the resolver layers.
+
+---
+
+## Repo layout
 
 ```
-.
-├── pyproject.toml
+coref-commitments/
 ├── README.md
+├── DECISIONS.md           # All modeling decisions with rationale
+├── MESSAGES.md            # Per-message annotation reasoning trace
+├── pyproject.toml
 └── src/
     └── coref_commitments/
-        ├── __init__.py
         └── data/
             ├── identity/
-            │   ├── canonical_entities.json    # People, consolidated from HRIS / IdP / Slack / Linear
-            │   └── canonical_tickets.json     # Linear tickets
-            └── mock_sources/
-                ├── slack_messages.json
-                ├── email_messages.json
-                └── linear_comments.json
+            │   ├── canonical_entities.json
+            │   └── canonical_tickets.json
+            ├── mock_sources/
+            │   ├── slack_messages.json
+            │   ├── email_messages.json
+            │   └── linear_comments.json
+            └── evals/
+                ├── mentions_truth.json
+                └── commitments_truth.json
 ```
 
-**Identity stores.** The two files in `data/identity/` represent what a consolidation pipeline would produce by joining upstream systems (HRIS like Workday, the identity provider like Okta, Slack's `users.list`, Linear's GraphQL users query). Fields are strictly limited to what real upstream APIs expose — no observational data, no learned aliases, no nicknames. Pronouns are sparse (only set when the person has explicitly filled in the field), which mirrors production reality. Jordan Reyes is deliberately *not* in the entity store: external consultants have no HRIS record, no Slack identity, and no Linear account. Handling these unresolved senders is part of the project's challenge, not something the data pre-solves.
+The `identity/` directory is the canonical store — the resolution target for all mention types. The `mock_sources/` directory contains the raw message data in shapes close to real API responses (Slack event payloads, email thread format, Linear comment format). The `evals/` directory contains the ground truth files authored against those sources.
 
-**Mock upstream sources.** The three files in `data/mock_sources/` are shaped like real API responses (Slack's `conversations.history`, Gmail thread format, Linear's GraphQL comment shape). Source adapters can later be swapped to hit live APIs without rippling through the rest of the pipeline. Some Slack messages contain a `_note` field marking authoring annotations (filler messages, specific test cases) — these are documentation, not data, and should be stripped during ingestion.
+Pipeline modules will add directories under `src/coref_commitments/` for adapters, resolvers, extractors, eval harness, and digest renderer as each module is implemented.
